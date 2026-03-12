@@ -36,8 +36,8 @@ export default function WhoWeArePage() {
   return (
     <div className="snap-container">
       {/* ── Left / Top panel — text ─────────────────────────────────── */}
-      <div className="snap-slide snap-slide--text flex items-center justify-center p-8 md:p-12 lg:p-16">
-        <div className="w-full max-w-xl border border-white/[0.06] p-8 md:p-12">
+      <div className="snap-slide snap-slide--text flex items-start justify-start md:items-center md:justify-center p-4 md:p-12 lg:p-16">
+        <div className="w-full max-w-xl border border-white/[0.06] p-5 md:p-12">
           <p className="mb-4 text-[0.6rem] uppercase tracking-[0.4em] text-white/30">
             About
           </p>
