@@ -48,3 +48,5 @@ nul
 
 # compiled js alongside ts sources
 src/app/lib/*.js
+
+.vercel

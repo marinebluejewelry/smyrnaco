@@ -61,7 +61,7 @@ export default function WhoWeArePage() {
       {/* ── Right / Bottom panel — 3D model viewer ──────────────────── */}
       <div className="snap-slide snap-slide--media relative">
         <Scene interactive orbitEnabled autoRotateSpeed={1.5} enableZoom>
-          <ProductModel path={MODELS[modelIndex]} baseScale={3} />
+          <ProductModel path={MODELS[modelIndex]} baseScale={3.0} />
         </Scene>
 
         {/* Model toggle button */}
