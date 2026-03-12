@@ -1,0 +1,186 @@
+@import "tailwindcss";
+
+/* ------------------------------------------------------------------ */
+/* Base layer – luxury black canvas                                    */
+/* ------------------------------------------------------------------ */
+
+html {
+  font-size: 18px;  /* ~1.125× base — all rem units scale from here */
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #0b0603;
+  color: #ffffff;
+  font-family: var(--font-sans), "Inter", system-ui, -apple-system, sans-serif;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ------------------------------------------------------------------ */
+/* Serif utility — Playfair Display for headlines                      */
+/* ------------------------------------------------------------------ */
+
+.font-serif {
+  font-family: var(--font-serif), "Playfair Display", Georgia, serif;
+}
+
+/* ------------------------------------------------------------------ */
+/* Selection highlight                                                 */
+/* ------------------------------------------------------------------ */
+
+::selection {
+  background-color: rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+}
+
+/* ------------------------------------------------------------------ */
+/* Scrollbar — hidden but functional                                   */
+/* ------------------------------------------------------------------ */
+
+::-webkit-scrollbar {
+  width: 0;
+  background: transparent;
+}
+
+/* Firefox */
+html {
+  scrollbar-width: none;
+}
+
+/* Desktop: scale root font-size for proportional text sizing */
+@media (min-width: 768px) {
+  html { font-size: 20px; } /* ~1.25× */
+}
+
+/* ------------------------------------------------------------------ */
+/* Smooth perspective for 3D text transforms (headline stagger)        */
+/* ------------------------------------------------------------------ */
+
+h1, h2, h3 {
+  perspective: 1000px;
+}
+
+/* ------------------------------------------------------------------ */
+/* Tabular nums for the loader counter                                 */
+/* ------------------------------------------------------------------ */
+
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+/* ------------------------------------------------------------------ */
+/* Video elements — prevent layout shift, ensure cover                 */
+/* ------------------------------------------------------------------ */
+
+video {
+  display: block;
+  object-fit: cover;
+}
+
+/* ------------------------------------------------------------------ */
+/* Canvas interaction — grab cursor when hovering 3D canvas            */
+/* ------------------------------------------------------------------ */
+
+canvas {
+  cursor: grab;
+}
+canvas:active {
+  cursor: grabbing;
+}
+
+/* ------------------------------------------------------------------ */
+/* Carousel — GPU compositing & prevent native image drag              */
+/* ------------------------------------------------------------------ */
+
+.carousel-track {
+  will-change: transform;
+}
+
+.carousel-slide img {
+  user-select: none;
+  -webkit-user-drag: none;
+  pointer-events: none;
+}
+
+/* ------------------------------------------------------------------ */
+/* 50/50 split layout — vertical on mobile, horizontal on desktop      */
+/* ------------------------------------------------------------------ */
+
+.snap-container {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  height: calc(100vh - 60px); /* subtract BottomMenu height */
+  scrollbar-width: none;
+}
+
+.snap-container::-webkit-scrollbar {
+  display: none;
+}
+
+/* Base shared properties for all panels */
+.snap-slide {
+  width: 100%;
+  min-width: 0;
+}
+
+/* Text panel — bottom on mobile (66%), left on desktop (50%) */
+.snap-slide--text {
+  flex: 0 0 66%;
+  height: 66%;
+  order: 2;
+  overflow-y: auto;
+  overflow-x: hidden;
+  /* Mobile: subtle thin scrollbar */
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255,255,255,0.15) transparent;
+}
+
+.snap-slide--text::-webkit-scrollbar {
+  width: 3px;
+  display: block;
+}
+
+.snap-slide--text::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.snap-slide--text::-webkit-scrollbar-thumb {
+  background-color: rgba(255,255,255,0.15);
+  border-radius: 3px;
+}
+
+/* Media panel — top on mobile (34%), right on desktop (50%) */
+.snap-slide--media {
+  flex: 0 0 34%;
+  height: 34%;
+  order: 1;
+  overflow: hidden;
+}
+
+/* Desktop: horizontal 50/50, natural order */
+@media (min-width: 768px) {
+  .snap-container {
+    flex-direction: row;
+  }
+  .snap-slide--text,
+  .snap-slide--media {
+    flex: 1 1 0%;
+    width: 50%;
+    height: 100%;
+    order: 0;
+  }
+  .snap-slide--text {
+    overflow-y: auto;
+    scrollbar-width: none;
+  }
+  .snap-slide--text::-webkit-scrollbar {
+    display: none;
+  }
+  .snap-slide--media {
+    overflow: hidden;
+  }
+}
