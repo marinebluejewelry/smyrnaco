@@ -64,7 +64,7 @@ export default function HowWeDoItPage() {
     <div className="snap-container">
 
       {/* ── Left / Top panel — tabs + text ─────────────────────────── */}
-      <div className="snap-slide snap-slide--text flex flex-col items-start justify-start p-4 md:p-12 lg:p-16 !overflow-y-hidden">
+      <div className="snap-slide snap-slide--text flex flex-col items-start justify-start p-4 md:p-12 lg:p-16">
         {/* Eyebrow */}
         <p className="mb-6 text-[0.6rem] uppercase tracking-[0.4em] text-white/30">
           Process
@@ -79,7 +79,7 @@ export default function HowWeDoItPage() {
         </h1>
 
         {/* Tab bar */}
-        <div className="steps-scrollbar mb-5 flex gap-2 border-b border-white/10 pb-2 whitespace-nowrap">
+        <div className="steps-scrollbar mb-10 flex w-full overflow-x-auto gap-2 border-b border-white/10 pb-3 whitespace-nowrap">
           {steps.map((step, i) => (
             <button
               key={step.id}

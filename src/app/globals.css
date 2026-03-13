@@ -193,7 +193,6 @@ canvas:active {
 /* ------------------------------------------------------------------ */
 
 .steps-scrollbar {
-  overflow-x: scroll;
   overflow-y: hidden;
   scrollbar-width: thin;
   scrollbar-color: rgba(255,255,255,0.25) transparent;
