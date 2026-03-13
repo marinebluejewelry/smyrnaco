@@ -124,7 +124,7 @@ export default function Home() {
       />
 
       {/* ── Bottom overlay — replay + headline ──────────────────────── */}
-      <div className="absolute bottom-24 left-8 right-8 z-10">
+      <div className="absolute bottom-6 left-8 right-8 z-10">
 
         {/* Replay — above headline, right-aligned */}
         {phase === "loop" && (
