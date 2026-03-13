@@ -79,7 +79,7 @@ export default function HowWeDoItPage() {
         </h1>
 
         {/* Tab bar */}
-        <div className="steps-scrollbar mb-10 flex gap-6 border-b border-white/10 pb-3 whitespace-nowrap">
+        <div className="steps-scrollbar mb-5 flex gap-2 border-b border-white/10 pb-2 whitespace-nowrap">
           {steps.map((step, i) => (
             <button
               key={step.id}
