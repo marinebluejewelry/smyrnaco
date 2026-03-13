@@ -99,14 +99,20 @@ export function ShopNowCTA() {
         ref={contentRef}
         className="overflow-hidden md:!h-auto md:!opacity-100"
       >
-        <div className="flex flex-col md:flex-row gap-2">
+        <div className="flex flex-col md:flex-row gap-2 items-end">
           {SHOP_LINKS.map((link) => (
             <a
               key={link.label}
               href={link.href}
               target="_blank"
               rel="noopener noreferrer"
-              className="border border-white/15 bg-black/60 backdrop-blur-sm px-4 py-2 text-[0.6rem] uppercase tracking-[0.3em] text-white/70 transition-all duration-300 hover:bg-white/10 hover:text-white hover:border-white/30 text-center"
+              className={`
+                border border-white/15 bg-black/60 backdrop-blur-sm uppercase tracking-[0.3em] text-white/70 transition-all duration-300 hover:bg-white/10 hover:text-white hover:border-white/30 text-center
+                ${link.label === "Retail"
+                  ? "px-3 py-1.5 text-[0.5rem]"
+                  : "px-4 py-2 text-[0.6rem]"
+                }
+              `}
             >
               {link.label}
             </a>

@@ -64,7 +64,7 @@ export default function HowWeDoItPage() {
     <div className="snap-container">
 
       {/* ── Left / Top panel — tabs + text ─────────────────────────── */}
-      <div className="snap-slide snap-slide--text flex flex-col justify-center p-8 md:p-12 lg:p-16">
+      <div className="snap-slide snap-slide--text flex flex-col justify-center p-8 md:p-12 lg:p-16 !overflow-y-hidden">
 
         {/* Eyebrow */}
         <p className="mb-6 text-[0.6rem] uppercase tracking-[0.4em] text-white/30">
@@ -80,7 +80,7 @@ export default function HowWeDoItPage() {
         </h1>
 
         {/* Tab bar */}
-        <div className="mb-10 flex gap-6 border-b border-white/10 pb-3 overflow-x-auto whitespace-nowrap" style={{ scrollbarWidth: "none" }}>
+        <div className="mb-10 flex gap-6 border-b border-white/10 pb-3 overflow-x-auto whitespace-nowrap" style={{ scrollbarWidth: "thin", scrollbarColor: "rgba(255,255,255,0.15) transparent" }}>
           {steps.map((step, i) => (
             <button
               key={step.id}
@@ -88,7 +88,7 @@ export default function HowWeDoItPage() {
               className={`
                 pb-2 text-[0.65rem] uppercase tracking-[0.3em] transition-all duration-300
                 ${i === activeTab
-                  ? "text-white border-b-2 border-white -mb-[calc(0.1875rem+1px)]"
+                  ? "text-white"
                   : "text-white/35 hover:text-white/60"
                 }
               `}

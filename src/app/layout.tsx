@@ -34,8 +34,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${inter.variable} ${playfair.variable} antialiased`}>
-        {children}
+      <body className={`${inter.variable} ${playfair.variable} antialiased flex flex-col min-h-screen`}>
+        <main className="flex-1 flex flex-col">
+          {children}
+        </main>
         <ShopNowCTA />
         <BottomMenu />
       </body>

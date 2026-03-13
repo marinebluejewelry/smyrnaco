@@ -31,7 +31,7 @@ export function BottomMenu() {
 
   return (
     <nav
-      className="fixed bottom-0 inset-x-0 z-50 flex items-center justify-center border-t border-white/5 bg-black/80 backdrop-blur-md"
+      className="flex items-center justify-center border-t border-white/5 bg-black/80 backdrop-blur-md flex-shrink-0"
       style={{ height: "60px" }}
     >
       <ul

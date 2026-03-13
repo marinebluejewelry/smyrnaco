@@ -82,7 +82,7 @@ export default function Home() {
     ? home.videoLoopPosterMobile : (home.videoLoopPoster || undefined);
 
   return (
-    <div className="relative h-screen w-screen overflow-hidden bg-black">
+    <div className="relative flex-1 w-full overflow-hidden bg-black">
 
       {/* ── Video A — intro (plays once) ─────────────────────────────── */}
       <video

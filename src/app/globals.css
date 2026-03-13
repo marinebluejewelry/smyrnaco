@@ -113,7 +113,8 @@ canvas:active {
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  height: calc(100vh - 60px); /* subtract BottomMenu height */
+  flex: 1;          /* fill available space in parent */
+  min-height: 0;    /* allow flex child to shrink below content size */
   scrollbar-width: none;
 }
 
