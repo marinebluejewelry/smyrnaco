@@ -125,7 +125,7 @@ export default function ConceptualizingPage() {
     <div className="snap-container">
 
       {/* ── Left panel — text ──────────────────────────────────────── */}
-      <div className="snap-slide snap-slide--text flex flex-col justify-center p-8 md:p-12 lg:p-16">
+      <div className="snap-slide snap-slide--text flex flex-col justify-start p-8 md:p-12 lg:p-16">
         <p className="mb-4 text-[0.6rem] uppercase tracking-[0.4em] text-white/30">
           Interactive
         </p>
