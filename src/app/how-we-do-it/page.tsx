@@ -80,7 +80,7 @@ export default function HowWeDoItPage() {
         </h1>
 
         {/* Tab bar */}
-        <div className="mb-10 flex gap-6 border-b border-white/10 pb-3 overflow-x-auto whitespace-nowrap" style={{ scrollbarWidth: "thin", scrollbarColor: "rgba(255,255,255,0.15) transparent" }}>
+        <div className="steps-scrollbar mb-10 flex gap-6 border-b border-white/10 pb-3 whitespace-nowrap">
           {steps.map((step, i) => (
             <button
               key={step.id}

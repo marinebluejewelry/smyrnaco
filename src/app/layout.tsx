@@ -34,7 +34,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${inter.variable} ${playfair.variable} antialiased flex flex-col h-screen overflow-hidden`}>
+      <body className={`${inter.variable} ${playfair.variable} antialiased flex flex-col overflow-hidden`}>
         <main className="flex-1 flex flex-col">
           {children}
         </main>

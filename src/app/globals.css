@@ -17,6 +17,8 @@ body {
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  height: 100vh;        /* fallback for older browsers */
+  height: 100dvh;       /* dynamic viewport height — excludes browser chrome */
 }
 
 /* ------------------------------------------------------------------ */
@@ -184,4 +186,29 @@ canvas:active {
   .snap-slide--media {
     overflow: hidden;
   }
+}
+
+/* ------------------------------------------------------------------ */
+/* Steps tab bar — always-visible horizontal scrollbar                 */
+/* ------------------------------------------------------------------ */
+
+.steps-scrollbar {
+  overflow-x: scroll;
+  overflow-y: hidden;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255,255,255,0.25) transparent;
+}
+
+.steps-scrollbar::-webkit-scrollbar {
+  height: 3px;
+  display: block;
+}
+
+.steps-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.steps-scrollbar::-webkit-scrollbar-thumb {
+  background-color: rgba(255,255,255,0.25);
+  border-radius: 3px;
 }

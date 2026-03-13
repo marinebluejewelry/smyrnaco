@@ -82,7 +82,7 @@ export function ShopNowCTA() {
       {/* ── Mobile toggle — vertical "SHOP" tab ────────────────────── */}
       <button
         onClick={toggle}
-        className="md:hidden border border-white/15 bg-black/60 backdrop-blur-sm px-2 py-3 text-[0.55rem] uppercase tracking-[0.25em] text-white/60 transition-all duration-300 hover:bg-white/10 hover:text-white"
+        className="md:hidden border border-white/15 bg-black/60 backdrop-blur-sm px-2 py-2 text-[0.6rem] uppercase tracking-[0.25em] text-white/60 transition-all duration-300 hover:bg-white/10 hover:text-white"
         style={{ writingMode: "horizontal-tb", textOrientation: "mixed" }}
         aria-label={isExpanded ? "Collapse shop links" : "Expand shop links"}
       >
@@ -110,7 +110,7 @@ export function ShopNowCTA() {
                 border border-white/15 bg-black/60 backdrop-blur-sm uppercase tracking-[0.3em] text-white/70 transition-all duration-300 hover:bg-white/10 hover:text-white hover:border-white/30 text-center
                 py-2 text-[0.6rem]
                 ${link.label === "Retail"
-                  ? "px-2 md:px-4"
+                  ? "px-4 md:px-4"
                   : "px-4"
                 }
               `}
