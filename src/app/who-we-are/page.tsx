@@ -27,7 +27,7 @@ const ProductModel = dynamic(
 );
 
 // ── Available models ────────────────────────────────────────────────────────
-const MODELS = ["/models/product.glb", "/models/product2.glb"];
+const MODELS = ["/models/product.glb", "/models/product3.glb", "/models/anahita.glb", "/models/anahitam.glb", "/models/anahitam1.glb", "/models/anahitamck.glb"];
 
 export default function WhoWeArePage() {
   const [modelIndex, setModelIndex] = useState(0);
@@ -61,7 +61,7 @@ export default function WhoWeArePage() {
       {/* ── Right / Bottom panel — 3D model viewer ──────────────────── */}
       <div className="snap-slide snap-slide--media relative">
         <Scene interactive orbitEnabled autoRotateSpeed={1.5} enableZoom>
-          <ProductModel path={MODELS[modelIndex]} baseScale={2.0} />
+          <ProductModel path={MODELS[modelIndex]} baseScale={0.2} />
         </Scene>
 
         {/* Model toggle button */}

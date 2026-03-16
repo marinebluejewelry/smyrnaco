@@ -31,7 +31,7 @@ export function BottomMenu() {
 
   return (
     <nav
-      className="flex items-center justify-center border-t border-white/5 bg-black/80 backdrop-blur-md flex-shrink-0 pb-3 md:pb-0"
+      className="flex items-center justify-center border-t border-white/5 bg-black/80 backdrop-blur-md flex-shrink-0 pb-3 md:pb-0 z-50"
       style={{ minHeight: "60px" }}
     >
       <ul

@@ -44,7 +44,7 @@ const DESKTOP = {
   scale: 10.15,
 };
 const MOBILE = {
-  position: [0, 1.4, 0] as [number, number, number],
+  position: [0, 0.4, 0] as [number, number, number],
   scale: 0.65,
 };
 
