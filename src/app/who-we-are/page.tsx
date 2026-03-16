@@ -27,7 +27,7 @@ const ProductModel = dynamic(
 );
 
 // ── Available models ────────────────────────────────────────────────────────
-const MODELS = ["/models/anahita.glb", "/models/anahitam1.glb"];
+const MODELS = ["/models/product.glb"];
 
 export default function WhoWeArePage() {
   const [modelIndex, setModelIndex] = useState(0);
