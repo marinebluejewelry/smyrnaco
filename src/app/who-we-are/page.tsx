@@ -3,6 +3,7 @@
 import { useState } from "react";
 import dynamic from "next/dynamic";
 import siteContent from "@/app/lib/data";
+import { modelPath } from "@/app/lib/models";
 
 // ---------------------------------------------------------------------------
 // Who We Are — 50/50 split layout.
@@ -27,7 +28,7 @@ const ProductModel = dynamic(
 );
 
 // ── Available models ────────────────────────────────────────────────────────
-const MODELS = ["/models/product.glb"];
+const MODELS = [modelPath("product.glb")];
 
 export default function WhoWeArePage() {
   const [modelIndex, setModelIndex] = useState(0);
