@@ -45,7 +45,7 @@ const DESKTOP = {
 };
 const MOBILE = {
   position: [0, 0.2, 0] as [number, number, number],
-  scale: 0.6,
+  scale: 0.25,
 };
 
 export function ProductModel({
