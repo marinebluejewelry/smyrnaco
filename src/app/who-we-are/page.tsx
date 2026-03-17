@@ -31,6 +31,8 @@ const ProductModel = dynamic(
 const MODELS = [
   modelPath("anahita.glb"),
   modelPath("anahitam1.glb"),
+  modelPath("yetermk_compressed.glb"),
+  modelPath("anahitamck.glb"),
 ];
 
 export default function WhoWeArePage() {
