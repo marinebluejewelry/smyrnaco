@@ -40,12 +40,12 @@ interface ProductModelProps {
 
 // Config per breakpoint
 const DESKTOP = {
-  position: [2.4, 0, 0] as [number, number, number],
-  scale: 10.15,
+  position: [0, 0, 0] as [number, number, number],
+  scale: 0.5,
 };
 const MOBILE = {
-  position: [0, 0.4, 0] as [number, number, number],
-  scale: 0.65,
+  position: [0, 0.2, 0] as [number, number, number],
+  scale: 0.6,
 };
 
 export function ProductModel({
