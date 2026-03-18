@@ -8,8 +8,8 @@ import { usePathname } from "next/navigation";
 // viewport. Renders in the root layout so it survives page transitions.
 //
 // Features:
-//   • 5 nav links with active-page highlighting via usePathname()
-//   • Horizontally scrollable on mobile for overflow
+//   • 6 nav links with active-page highlighting via usePathname()
+//   • Horizontally scrollable on mobile with visible scrollbar
 //   • Glassmorphism background for luxury feel
 // ---------------------------------------------------------------------------
 
@@ -20,9 +20,10 @@ interface NavItem {
 
 const NAV_ITEMS: NavItem[] = [
   { label: "Home", href: "/" },
-  { label: "Who We Are", href: "/who-we-are" },
+  { label: "Projects", href: "/projects" },
+  { label: "Partners", href: "/partners" },
   { label: "How We Do It", href: "/how-we-do-it" },
-  { label: "Conceptualizing", href: "/conceptualizing" },
+  { label: "About Us", href: "/about-us" },
   { label: "Contact", href: "/contact" },
 ];
 
@@ -35,8 +36,7 @@ export function BottomMenu() {
       style={{ minHeight: "60px" }}
     >
       <ul
-        className="flex items-center gap-4 px-4 md:gap-8 lg:gap-12 overflow-x-auto whitespace-nowrap md:overflow-x-visible md:justify-center"
-        style={{ scrollbarWidth: "none" }}
+        className="steps-scrollbar flex items-center gap-4 px-4 md:gap-8 lg:gap-12 overflow-x-auto whitespace-nowrap md:overflow-x-visible md:justify-center"
       >
         {NAV_ITEMS.map((item) => {
           const isActive = pathname === item.href;

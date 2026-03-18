@@ -134,7 +134,7 @@ export function Scene({
         {/* ── Ground shadow ────────────────────────────────────── */}
         <ContactShadows
           position={[0, -2.5, 0]}
-          opacity={0.4}
+          opacity={0.1}
           scale={14}
           blur={2.5}
           far={4}

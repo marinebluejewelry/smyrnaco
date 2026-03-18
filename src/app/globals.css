@@ -11,7 +11,7 @@ html {
 body {
   margin: 0;
   padding: 0;
-  background-color: #0b0603;
+  background-color: #29100a;
   color: #ffffff;
   font-family: var(--font-sans), "Inter", system-ui, -apple-system, sans-serif;
   overflow-x: hidden;
@@ -132,8 +132,8 @@ canvas:active {
 
 /* Text panel — bottom on mobile (66%), left on desktop (50%) */
 .snap-slide--text {
-  flex: 0 0 66%;
-  height: 66%;
+  flex: 0 0 50%;
+  height: 50%;
   order: 2;
   overflow-y: auto;
   overflow-x: hidden;
@@ -158,8 +158,8 @@ canvas:active {
 
 /* Media panel — top on mobile (34%), right on desktop (50%) */
 .snap-slide--media {
-  flex: 0 0 34%;
-  height: 34%;
+  flex: 0 0 50%;
+  height: 50%;
   order: 1;
   overflow: hidden;
 }
@@ -210,4 +210,30 @@ canvas:active {
 .steps-scrollbar::-webkit-scrollbar-thumb {
   background-color: rgba(255,255,255,0.25);
   border-radius: 3px;
+}
+
+/* ------------------------------------------------------------------ */
+/* About Us — three-panel order overrides (mobile)                     */
+/* Mobile: media top (1), hint strip middle (2), text bottom (3)       */
+/* Desktop: natural source order                                       */
+/* ------------------------------------------------------------------ */
+
+.about-us-text {
+  order: 3;
+}
+
+.about-us-hint {
+  order: 2;
+}
+
+.about-us-media {
+  order: 1;
+}
+
+@media (min-width: 768px) {
+  .about-us-text,
+  .about-us-hint,
+  .about-us-media {
+    order: 0;
+  }
 }

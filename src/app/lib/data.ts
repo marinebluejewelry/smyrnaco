@@ -49,42 +49,64 @@ export interface VideoItem {
 // ── Page-specific content types ─────────────────────────────────────────────
 
 export interface HomeContent {
-  /** Path to logo image (PNG/WebP) in /public/images/ */
   logoSrc: string;
   headline: string;
   subtitle: string;
-  /** Video A — plays once on load */
   videoIntroSrc: string;
-  /** Video B — plays on infinite loop after A ends */
   videoLoopSrc: string;
-  /** Poster image shown before intro video loads (improves LCP) */
   videoIntroPoster?: string;
-  /** Poster image shown before loop video loads */
   videoLoopPoster?: string;
-  /** Mobile-specific intro video (portrait aspect ratio) */
   videoIntroSrcMobile?: string;
-  /** Mobile-specific loop video (portrait aspect ratio) */
   videoLoopSrcMobile?: string;
-  /** Poster for mobile intro video */
   videoIntroPosterMobile?: string;
-  /** Poster for mobile loop video */
   videoLoopPosterMobile?: string;
 }
 
-export interface WhoWeAreContent {
+// ── Projects (replaces Who We Are) ──────────────────────────────────────────
+
+export interface ProjectTab {
+  id: string;
+  tabLabel: string;
   headline: string;
-  paragraphs: string[];
+  body: string;
+  /** Filename of .glb model in /public/models/ */
+  modelFilename: string;
+}
+
+export interface ProjectsContent {
+  headline: string;
+  tabs: ProjectTab[];
+}
+
+// ── Partners (new page) ─────────────────────────────────────────────────────
+
+export interface PartnerTab {
+  id: string;
+  tabLabel: string;
+  headline: string;
+  body: string;
   images: MediaImage[];
 }
+
+export interface PartnersContent {
+  headline: string;
+  tabs: PartnerTab[];
+  partnership: {
+    headline: string;
+    body: string;
+    ctaLabel: string;
+    ctaHref: string;
+  };
+}
+
+// ── How We Do It ────────────────────────────────────────────────────────────
 
 export interface ProcessStep {
   id: string;
   tabLabel: string;
   headline: string;
   body: string;
-  /** Path to .mp4 video for this step */
   videoSrc: string;
-  /** Poster image shown before video loads (improves page speed) */
   posterSrc?: string;
 }
 
@@ -93,9 +115,14 @@ export interface HowWeDoItContent {
   steps: ProcessStep[];
 }
 
-export interface ConceptualizingContent {
+// ── About Us (replaces Conceptualizing) ─────────────────────────────────────
+
+export interface AboutUsContent {
   headline: string;
-  body: string;
+  paragraphs: string[];
+  scrollHint: string;
+  completionText: string;
+  completionHref: string;
 }
 
 // ── Site-wide ───────────────────────────────────────────────────────────────
@@ -103,9 +130,10 @@ export interface ConceptualizingContent {
 export interface SiteContent {
   brand: string;
   home: HomeContent;
-  whoWeAre: WhoWeAreContent;
+  projects: ProjectsContent;
+  partners: PartnersContent;
   howWeDoIt: HowWeDoItContent;
-  conceptualizing: ConceptualizingContent;
+  aboutUs: AboutUsContent;
   footer: { line: string };
   /** @deprecated Legacy — kept for unused single-page components */
   hero?: HeroContent;
@@ -123,6 +151,14 @@ export interface SiteContent {
 // Content
 // ===========================================================================
 
+const MODEL_FILES = [
+  "yetermk_compressed.glb",
+  "bilekliktohiddeneme_compressed.glb",
+  "anka_compressed.glb",
+  "ankakolye_compressed.glb",
+  "haomabileklik_compressed.glb",
+];
+
 const siteContent: SiteContent = {
   brand: "SMYRNA",
 
@@ -131,56 +167,75 @@ const siteContent: SiteContent = {
     logoSrc: "/images/smyrna-logo-white.png",
     headline: "Redefine Elegance.",
     subtitle: "Crafted for the Bold",
-    videoIntroSrc: "/videos/smyrna-intro.mp4",
-    videoLoopSrc: "/videos/smyrna-loop.mp4",
-    videoIntroPoster: "",  // TODO: add poster image path
-    videoLoopPoster: "",   // TODO: add poster image path
-    videoIntroSrcMobile: "",   // TODO: add mobile intro video path
-    videoLoopSrcMobile: "",    // TODO: add mobile loop video path
-    videoIntroPosterMobile: "", // TODO: add mobile intro poster
-    videoLoopPosterMobile: "",  // TODO: add mobile loop poster
+    videoIntroSrc: "/videos/herointro.mp4",
+    videoLoopSrc: "/videos/heroloop.mp4",
+    videoIntroPoster: "",
+    videoLoopPoster: "",
+    videoIntroSrcMobile: "/videos/mobileintro.mp4",
+    videoLoopSrcMobile: "/videos/mobileloop.mp4",
+    videoIntroPosterMobile: "",
+    videoLoopPosterMobile: "",
   },
 
-  // ── Who We Are ──────────────────────────────────────────────────────────
-  whoWeAre: {
-    headline: "Who We Are",
-    paragraphs: [
-      "SMYRNA is a jewelry house rooted in the ancient craft traditions of Anatolia, reimagined through a contemporary lens. We believe that adornment is not decoration — it is identity.",
-      "Every piece in our collection is the culmination of hundreds of hours of deliberate refinement. Our artisans work at the intersection of tradition and technology, ensuring every curve, every edge, every finish meets an uncompromising standard.",
-      "We source only what the earth offers at its finest — rare alloys, ethically harvested stones, and composites engineered for permanence. The material is never secondary to the form; it is the form.",
+  // ── Projects ──────────────────────────────────────────────────────────
+  projects: {
+    headline: "Projects",
+    tabs: Array.from({ length: 10 }, (_, i) => ({
+      id: `project-${i + 1}`,
+      tabLabel: `Project ${i + 1}`,
+      headline: `Project ${i + 1} — Title`,
+      body: "This is a placeholder description for this project. Replace with actual project details, materials used, inspiration, and craftsmanship notes.",
+      modelFilename: MODEL_FILES[i % MODEL_FILES.length],
+    })),
+  },
+
+  // ── Partners ──────────────────────────────────────────────────────────
+  partners: {
+    headline: "Partners",
+    tabs: [
+      {
+        id: "partner-1",
+        tabLabel: "Partner 1",
+        headline: "Partner 1 — Collaboration",
+        body: "A brief description of this partnership and the products we create together. Replace with actual partner details.",
+        images: [
+          { id: "p1-img-1", src: "/images/who-we-are-img1.webp", alt: "Partner 1 product 1", caption: "Product detail" },
+          { id: "p1-img-2", src: "/images/who-we-are-img2.webp", alt: "Partner 1 product 2", caption: "Product silhouette" },
+          { id: "p1-img-3", src: "/images/who-we-are-img3.webp", alt: "Partner 1 product 3", caption: "Full collection" },
+          { id: "p1-img-4", src: "/images/who-we-are-img4.webp", alt: "Partner 1 product 4", caption: "Edge detail" },
+        ],
+      },
+      {
+        id: "partner-2",
+        tabLabel: "Partner 2",
+        headline: "Partner 2 — Collaboration",
+        body: "A brief description of this partnership and the products we create together. Replace with actual partner details.",
+        images: [
+          { id: "p2-img-1", src: "/images/web_cowrie_pointed_arctic_rust.webp", alt: "Partner 2 product 1", caption: "Cowrie pointed" },
+          { id: "p2-img-2", src: "/images/web_runes_cowrie_arctic_rust.webp", alt: "Partner 2 product 2", caption: "Runes cowrie" },
+          { id: "p2-img-3", src: "/images/web_solo_1_duablas_arctic_rust.webp", alt: "Partner 2 product 3", caption: "Solo duablas" },
+          { id: "p2-img-4", src: "/images/web_solo_horizon_3_arctic_rust.webp", alt: "Partner 2 product 4", caption: "Solo horizon" },
+        ],
+      },
+      {
+        id: "partner-3",
+        tabLabel: "Partner 3",
+        headline: "Partner 3 — Collaboration",
+        body: "A brief description of this partnership and the products we create together. Replace with actual partner details.",
+        images: [
+          { id: "p3-img-1", src: "/images/who-we-are-img1.webp", alt: "Partner 3 product 1", caption: "Product detail" },
+          { id: "p3-img-2", src: "/images/web_cowrie_pointed_arctic_rust.webp", alt: "Partner 3 product 2", caption: "Cowrie" },
+          { id: "p3-img-3", src: "/images/who-we-are-img3.webp", alt: "Partner 3 product 3", caption: "Collection" },
+          { id: "p3-img-4", src: "/images/web_solo_horizon_3_arctic_rust.webp", alt: "Partner 3 product 4", caption: "Horizon" },
+        ],
+      },
     ],
-    images: [
-      {
-        id: "img-detail-1",
-        src: "/images/who-we-are-img1.webp",
-        alt: "Close-up of surface texture showing brushed metal finish",
-        caption: "Brushed alloy — 0.3mm grain, hand-finished.",
-      },
-      {
-        id: "img-detail-2",
-        src: "/images/who-we-are-img2.webp",
-        alt: "Product silhouette against gradient background",
-        caption: "Silhouette study — form reduced to its essence.",
-      },
-      {
-        id: "img-wide-1",
-        src: "/images/who-we-are-img3.webp",
-        alt: "Panoramic studio shot of the full collection",
-        caption: "The complete collection, arranged by material family.",
-      },
-      {
-        id: "img-detail-3",
-        src: "/images/who-we-are-img4.webp",
-        alt: "Extreme close-up of edge detail",
-        caption: "Edge geometry — precision within 0.01mm tolerance.",
-      },
-      {
-        id: "img-detail-4",
-        src: "/images/who-we-are-img1.webp",
-        alt: "Product in natural light",
-        caption: "How light transforms the surface throughout the day.",
-      },
-    ],
+    partnership: {
+      headline: "Partner With Us",
+      body: "We collaborate with brands, designers, and retailers who share our commitment to quality craftsmanship. Whether you are looking for exclusive collections, custom designs, or wholesale partnerships, we would love to hear from you.",
+      ctaLabel: "Join Us",
+      ctaHref: "/contact",
+    },
   },
 
   // ── How We Do It ────────────────────────────────────────────────────────
@@ -193,7 +248,7 @@ const siteContent: SiteContent = {
         headline: "Concept to Blueprint",
         body: "Every piece begins as a sketch — a dialogue between intuition and mathematics. Our designers translate abstract ideas into precise technical drawings, balancing organic beauty with structural integrity. Each design undergoes dozens of iterations before it earns a place in production.",
         videoSrc: "/videos/how-we-do-step1.mp4",
-        posterSrc: "",  // TODO: add poster image path
+        posterSrc: "",
       },
       {
         id: "step-casting",
@@ -201,7 +256,7 @@ const siteContent: SiteContent = {
         headline: "Molten Precision",
         body: "Using the lost-wax casting method perfected over millennia, we transform precious metals into three-dimensional form. Temperature, timing, and material purity are controlled to the fraction of a degree. The result: flawless castings that capture every microscopic detail of the original wax model.",
         videoSrc: "/videos/how-we-do-step2.mp4",
-        posterSrc: "",  // TODO: add poster image path
+        posterSrc: "",
       },
       {
         id: "step-polishing",
@@ -209,7 +264,7 @@ const siteContent: SiteContent = {
         headline: "Surface Alchemy",
         body: "Polishing is where raw metal becomes jewelry. Through progressive stages — from coarse abrasion to mirror-finishing compounds — each surface achieves its intended character. Some pieces demand a brushed matte; others, a liquid-chrome reflection. The artisan decides, guided by decades of touch memory.",
         videoSrc: "/videos/how-we-do-step3.mp4",
-        posterSrc: "",  // TODO: add poster image path
+        posterSrc: "",
       },
       {
         id: "step-setting",
@@ -217,15 +272,26 @@ const siteContent: SiteContent = {
         headline: "Stone Meets Metal",
         body: "Setting is the most nerve-wracking stage: a single slip can shatter a stone worth thousands. Our setters work under magnification, using hand tools to gently coax metal around each gem until it is held with invisible security. The stone should appear to float, defying gravity and expectation.",
         videoSrc: "/videos/how-we-do-step4.mp4",
-        posterSrc: "",  // TODO: add poster image path
+        posterSrc: "",
       },
     ],
   },
 
-  // ── Conceptualizing ─────────────────────────────────────────────────────
-  conceptualizing: {
-    headline: "Conceptualizing",
-    body: "Watch as raw elements assemble into form. This interactive visualization demonstrates the structural logic behind our braided collection — three strands of precious beads weaving together into a unified whole. Scroll to control the assembly. Drag to rotate.",
+  // ── About Us ──────────────────────────────────────────────────────────
+  aboutUs: {
+    headline: "About Us",
+    paragraphs: [
+      "SMYRNA is a jewelry house rooted in the ancient craft traditions of Anatolia, reimagined through a contemporary lens. We believe that adornment is not decoration — it is identity. Every piece in our collection is the culmination of hundreds of hours of deliberate refinement, where artisans work at the intersection of tradition and technology.",
+      "Our journey began in the workshops of Izmir, where generations of master jewelers passed down techniques that predate written history. The lost-wax casting method, the delicate art of filigree, the science of metal alloys — these are living traditions that inform every decision we make. We do not merely reference the past; we build upon it with modern precision tools, computational design, and ethically sourced materials.",
+      "The name SMYRNA itself carries weight. It is the ancient name for Izmir, a city that has been a crossroads of cultures, commerce, and creativity for over three millennia. Phoenician traders, Greek artisans, Roman engineers, and Ottoman masters all left their mark here. We see ourselves as the latest chapter in that unbroken lineage — inheriting a responsibility to push the boundaries of what is possible in handcrafted jewelry.",
+      "Our design philosophy is rooted in restraint. We strip away the unnecessary until only the essential form remains. Every curve serves a purpose: structural integrity, the way light moves across a surface, how a piece feels against skin. We test dozens of variations before committing to a final design, and even then, we continue to refine in production. Nothing leaves our workshop until it meets the standard we have set for ourselves.",
+      "Materials matter as much as form. We source precious metals from certified responsible mines, gemstones from suppliers who can trace every stone back to its origin, and organic materials like mother-of-pearl and coral only from sustainable harvests. The environmental cost of luxury is a problem we take seriously, and we invest in solutions rather than simply acknowledging the challenge.",
+      "Each collection tells a story drawn from the natural world, from architecture, from mathematics. The braided patterns you see in our work are not arbitrary — they follow precise helical curves inspired by the way vines climb, the way rivers braid across a delta, the way DNA coils upon itself. These are patterns that nature has optimized over billions of years. We simply translate them into gold, silver, and stone.",
+      "We invite you to explore our work not as consumers, but as participants in a tradition that stretches back to the earliest human impulse to create beauty from raw materials. Every piece of SMYRNA jewelry is a conversation between maker and wearer — a shared belief that the objects we carry with us should be worthy of the stories they will witness.",
+    ],
+    scrollHint: "Scroll the text to complete animation",
+    completionText: "Inspired by our Marine Blue Jewelry product, Solo Waterfall",
+    completionHref: "https://wholesalejewelry.store/product/solo-waterfall-handmade-beaded-bracelet/",
   },
 
   // ── Footer ──────────────────────────────────────────────────────────────
