@@ -1,1 +1,2 @@
-public/models/
+# Models are now served directly from Vercel's edge CDN.
+# Do NOT ignore public/models/ — GitHub raw has strict rate limits (429).
