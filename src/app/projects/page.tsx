@@ -37,7 +37,7 @@ const ProductModel = dynamic(
 // Delay in ms between unmounting old model and mounting new one.
 // Mobile gets a much longer delay — iOS WebKit needs more time to reclaim VRAM.
 const SWAP_DELAY_DESKTOP = 150;
-const SWAP_DELAY_MOBILE = 600;
+const SWAP_DELAY_MOBILE = 1000;
 
 export default function ProjectsPage() {
   const [activePrimary, setActivePrimary] = useState(0);

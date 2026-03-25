@@ -132,13 +132,13 @@ export function Scene({
         />
 
         {/* ── Lighting rig ─────────────────────────────────────── */}
-        <ambientLight intensity={0.15} />
+        <ambientLight intensity={isMobile ? 0.4 : 0.15} />
 
         <directionalLight
           position={[5, 8, 5]}
           intensity={2}
           color="#fff5e6"
-          castShadow
+          castShadow={!isMobile}
         />
 
         <pointLight
@@ -147,49 +147,60 @@ export function Scene({
           color="#80a0ff"
         />
 
-        <pointLight
-          position={[2, -4, 3]}
-          intensity={0.4}
-          color="#ffe0c0"
-        />
+        {!isMobile && (
+          <pointLight
+            position={[2, -4, 3]}
+            intensity={0.4}
+            color="#ffe0c0"
+          />
+        )}
 
         {/* ── 3D content (provided by parent) ────────────────── */}
         {children}
 
-        {/* ── Ground shadow ────────────────────────────────────── */}
-        <ContactShadows
-          position={[0, -2.5, 0]}
-          opacity={0.1}
-          scale={14}
-          blur={2.5}
-          far={4}
-          resolution={isMobile ? 128 : 256}
-        />
+        {/* ── Ground shadow — desktop only ──────────────────── */}
+        {/* ContactShadows allocates a render target + geometry    */}
+        {/* that stays in GPU memory for the Scene lifetime.       */}
+        {!isMobile && (
+          <ContactShadows
+            position={[0, -2.5, 0]}
+            opacity={0.1}
+            scale={14}
+            blur={2.5}
+            far={4}
+            resolution={256}
+          />
+        )}
 
-        {/* ── Environment — studio HDRI for realistic reflections */}
-        <Environment resolution={isMobile ? 64 : 256}>
-          <Lightformer
-            form="rect"
-            intensity={2}
-            position={[0, 5, -5]}
-            scale={[10, 2, 1]}
-            color="#ffffff"
-          />
-          <Lightformer
-            form="ring"
-            intensity={0.8}
-            position={[-5, 2, 1]}
-            scale={3}
-            color="#c0c8ff"
-          />
-          <Lightformer
-            form="rect"
-            intensity={0.5}
-            position={[5, -1, 3]}
-            scale={[4, 4, 1]}
-            color="#ffe8d6"
-          />
-        </Environment>
+        {/* ── Environment — desktop only ────────────────────── */}
+        {/* Environment cubemap (6 faces × res²) + Lightformer    */}
+        {/* geometries eat ~13 geom + 6 tex of baseline GPU mem.  */}
+        {/* On mobile, ambient + directional light is sufficient.  */}
+        {!isMobile && (
+          <Environment resolution={256}>
+            <Lightformer
+              form="rect"
+              intensity={2}
+              position={[0, 5, -5]}
+              scale={[10, 2, 1]}
+              color="#ffffff"
+            />
+            <Lightformer
+              form="ring"
+              intensity={0.8}
+              position={[-5, 2, 1]}
+              scale={3}
+              color="#c0c8ff"
+            />
+            <Lightformer
+              form="rect"
+              intensity={0.5}
+              position={[5, -1, 3]}
+              scale={[4, 4, 1]}
+              color="#ffe8d6"
+            />
+          </Environment>
+        )}
 
         {/* ── Post-processing — desktop only ──────────────────── */}
         {/* Skipped entirely on mobile: EffectComposer allocates    */}
