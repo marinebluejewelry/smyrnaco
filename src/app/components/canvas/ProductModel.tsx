@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useEffect } from "react";
 import { useFrame, useThree } from "@react-three/fiber";
 import { useGLTF, Float } from "@react-three/drei";
 import { MathUtils } from "three";
@@ -54,10 +54,20 @@ export function ProductModel({
   baseScale = 1,
 }: ProductModelProps) {
   const groupRef = useRef<Group>(null!);
+  const prevPathRef = useRef(path);
   const { viewport } = useThree();
 
   // Load with Draco decompression enabled
   const { scene } = useGLTF(path, true);
+
+  // Evict previous model from GPU cache when path changes
+  useEffect(() => {
+    const prevPath = prevPathRef.current;
+    if (prevPath !== path) {
+      useGLTF.clear(prevPath);
+      prevPathRef.current = path;
+    }
+  }, [path]);
 
   // Responsive layout
   const isMobile = viewport.width < 6;

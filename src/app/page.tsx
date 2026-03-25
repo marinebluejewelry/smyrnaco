@@ -4,6 +4,7 @@ import { useRef, useState, useCallback, useEffect } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import siteContent from "@/app/lib/data";
+import { VideoLoadingOverlay } from "@/app/components/dom/VideoLoadingOverlay";
 
 // ---------------------------------------------------------------------------
 // Homepage — Full-viewport video sequence.
@@ -83,6 +84,9 @@ export default function Home() {
 
   return (
     <div className="relative flex-1 w-full overflow-hidden bg-black">
+
+      {/* ── Video loading overlay ──────────────────────────────────────── */}
+      <VideoLoadingOverlay videoRef={videoARef} />
 
       {/* ── Video A — intro (plays once) ─────────────────────────────── */}
       <video

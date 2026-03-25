@@ -14,7 +14,7 @@ import {
   Vignette,
 } from "@react-three/postprocessing";
 import { BlendFunction } from "postprocessing";
-import { Suspense, useEffect, useRef } from "react";
+import { Suspense, useEffect, useRef, useState } from "react";
 
 // ---------------------------------------------------------------------------
 // Scene — Reusable R3F Canvas shell with dramatic studio lighting + PostFX.
@@ -68,12 +68,18 @@ export function Scene({
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const controlsRef = useRef<any>(null);
 
+  // Detect mobile for reduced post-processing (saves GPU memory)
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    setIsMobile(window.matchMedia("(max-width: 767px)").matches);
+  }, []);
+
   return (
     <Canvas
       camera={{ position: [0, 0, 7], fov: 42 }}
-      dpr={[1, 2]}
+      dpr={[1, isMobile ? 1.5 : 2]}
       gl={{
-        antialias: true,
+        antialias: !isMobile,
         alpha: true,
         powerPreference: "high-performance",
       }}
@@ -166,24 +172,40 @@ export function Scene({
           />
         </Environment>
 
-        {/* ── Post-processing ──────────────────────────────────── */}
-        <EffectComposer multisampling={4}>
-          <Bloom
-            intensity={0.35}
-            luminanceThreshold={0.6}
-            luminanceSmoothing={0.9}
-            mipmapBlur
-          />
-          <Noise
-            blendFunction={BlendFunction.SOFT_LIGHT}
-            opacity={0.25}
-          />
-          <Vignette
-            blendFunction={BlendFunction.NORMAL}
-            offset={0.3}
-            darkness={0.65}
-          />
-        </EffectComposer>
+        {/* ── Post-processing (lighter on mobile to save GPU) ── */}
+        {isMobile ? (
+          <EffectComposer multisampling={0}>
+            <Bloom
+              intensity={0.15}
+              luminanceThreshold={0.6}
+              luminanceSmoothing={0.9}
+              mipmapBlur
+            />
+            <Vignette
+              blendFunction={BlendFunction.NORMAL}
+              offset={0.3}
+              darkness={0.45}
+            />
+          </EffectComposer>
+        ) : (
+          <EffectComposer multisampling={4}>
+            <Bloom
+              intensity={0.35}
+              luminanceThreshold={0.6}
+              luminanceSmoothing={0.9}
+              mipmapBlur
+            />
+            <Noise
+              blendFunction={BlendFunction.SOFT_LIGHT}
+              opacity={0.25}
+            />
+            <Vignette
+              blendFunction={BlendFunction.NORMAL}
+              offset={0.3}
+              darkness={0.65}
+            />
+          </EffectComposer>
+        )}
       </Suspense>
     </Canvas>
   );

@@ -5,6 +5,8 @@ import dynamic from "next/dynamic";
 import gsap from "gsap";
 import siteContent from "@/app/lib/data";
 import { modelPath } from "@/app/lib/models";
+import { LoadingOverlay } from "@/app/components/dom/LoadingOverlay";
+import { WebGLErrorBoundary } from "@/app/components/dom/WebGLErrorBoundary";
 
 // ---------------------------------------------------------------------------
 // Projects — 50/50 split with two-level tab navigation + 3D model viewer.
@@ -182,12 +184,15 @@ export default function ProjectsPage() {
 
       {/* ── Right / Bottom panel — 3D model viewer ──────────────────── */}
       <div className="snap-slide snap-slide--media relative">
-        <Scene interactive orbitEnabled autoRotateSpeed={1.5} enableZoom>
-          <ProductModel
-            path={modelPath(current.modelFilename)}
-            baseScale={0.2}
-          />
-        </Scene>
+        <LoadingOverlay />
+        <WebGLErrorBoundary>
+          <Scene interactive orbitEnabled autoRotateSpeed={1.5} enableZoom>
+            <ProductModel
+              path={modelPath(current.modelFilename)}
+              baseScale={0.2}
+            />
+          </Scene>
+        </WebGLErrorBoundary>
 
         {/* Prev / Next overlay buttons */}
         <button

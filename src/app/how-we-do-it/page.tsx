@@ -3,6 +3,7 @@
 import { useRef, useState, useCallback } from "react";
 import gsap from "gsap";
 import siteContent from "@/app/lib/data";
+import { VideoLoadingOverlay } from "@/app/components/dom/VideoLoadingOverlay";
 
 // ---------------------------------------------------------------------------
 // How We Do It — 50/50 split with tab navigation.
@@ -113,6 +114,7 @@ export default function HowWeDoItPage() {
 
       {/* ── Right / Bottom panel — fullbleed video ─────────────────── */}
       <div className="snap-slide snap-slide--media relative">
+        <VideoLoadingOverlay videoRef={videoRef} />
         <video
           ref={videoRef}
           className="absolute inset-0 h-full w-full object-cover"

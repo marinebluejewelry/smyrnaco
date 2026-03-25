@@ -10,6 +10,8 @@ import { useGSAP } from "@gsap/react";
 import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 import siteContent from "@/app/lib/data";
+import { LoadingOverlay } from "@/app/components/dom/LoadingOverlay";
+import { WebGLErrorBoundary } from "@/app/components/dom/WebGLErrorBoundary";
 
 gsap.registerPlugin(Observer);
 
@@ -172,13 +174,16 @@ export default function AboutUsPage() {
         ref={canvasContainerRef}
         className="snap-slide snap-slide--media about-us-media relative"
       >
-        <Scene interactive orbitEnabled={false}>
-          <BraceletWithRotation
-            progressRef={progressRef}
-            rotationRef={rotationRef}
-            onAssemblyComplete={handleAssemblyComplete}
-          />
-        </Scene>
+        <LoadingOverlay />
+        <WebGLErrorBoundary>
+          <Scene interactive orbitEnabled={false}>
+            <BraceletWithRotation
+              progressRef={progressRef}
+              rotationRef={rotationRef}
+              onAssemblyComplete={handleAssemblyComplete}
+            />
+          </Scene>
+        </WebGLErrorBoundary>
       </div>
     </div>
   );
