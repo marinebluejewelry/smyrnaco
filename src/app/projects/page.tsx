@@ -12,10 +12,13 @@ import { WebGLErrorBoundary } from "@/app/components/dom/WebGLErrorBoundary";
 // Projects — 50/50 split with two-level tab navigation + 3D model viewer.
 //
 // Model swap strategy (critical for mobile GPU memory):
-//   1. User clicks a tab → Scene is UNMOUNTED (modelReady = false)
-//   2. After a 150ms pause (GPU releases resources), new path is set
-//   3. Scene REMOUNTS with the new model (modelReady = true)
-//   This ensures only ONE model is ever in GPU memory at a time.
+//   The Scene (Canvas + WebGL context) stays mounted for the page lifetime.
+//   Only the ProductModel child is unmounted/remounted on tab switch:
+//   1. User clicks a tab → ProductModel unmounts (disposes GPU resources)
+//   2. After a 150ms pause (GPU reclaims memory), new path is set
+//   3. ProductModel remounts with the new .glb
+//   This avoids WebGL context create/destroy cycles that leak GPU memory
+//   on iOS Safari.
 // ---------------------------------------------------------------------------
 
 const Scene = dynamic(
@@ -60,7 +63,7 @@ export default function ProjectsPage() {
   // Staged model swap: unmount → pause → update state → remount
   const swapModel = useCallback(
     (updateFn: () => void) => {
-      // 1. Unmount the current Scene (releases GPU resources)
+      // 1. Unmount ProductModel (releases GPU resources, context stays alive)
       setModelReady(false);
 
       // 2. Animate text out
@@ -194,16 +197,16 @@ export default function ProjectsPage() {
       {/* ── Right / Bottom panel — 3D model viewer ──────────────────── */}
       <div className="snap-slide snap-slide--media relative">
         <LoadingOverlay />
-        {modelReady && (
-          <WebGLErrorBoundary>
-            <Scene interactive orbitEnabled autoRotateSpeed={1.5} enableZoom>
+        <WebGLErrorBoundary>
+          <Scene interactive orbitEnabled autoRotateSpeed={1.5} enableZoom>
+            {modelReady && (
               <ProductModel
                 path={modelPath(current.modelFilename)}
                 baseScale={0.2}
               />
-            </Scene>
-          </WebGLErrorBoundary>
-        )}
+            )}
+          </Scene>
+        </WebGLErrorBoundary>
 
         {/* Prev / Next overlay buttons */}
         <button
