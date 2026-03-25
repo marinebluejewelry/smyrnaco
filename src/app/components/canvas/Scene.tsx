@@ -77,7 +77,7 @@ export function Scene({
   return (
     <Canvas
       camera={{ position: [0, 0, 7], fov: 42 }}
-      dpr={[1, isMobile ? 1.5 : 2]}
+      dpr={[1, isMobile ? 1 : 2]}
       gl={{
         antialias: !isMobile,
         alpha: true,
@@ -163,11 +163,11 @@ export function Scene({
           scale={14}
           blur={2.5}
           far={4}
-          resolution={256}
+          resolution={isMobile ? 128 : 256}
         />
 
         {/* ── Environment — studio HDRI for realistic reflections */}
-        <Environment resolution={256}>
+        <Environment resolution={isMobile ? 64 : 256}>
           <Lightformer
             form="rect"
             intensity={2}

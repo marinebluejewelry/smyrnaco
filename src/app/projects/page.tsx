@@ -35,8 +35,9 @@ const ProductModel = dynamic(
 );
 
 // Delay in ms between unmounting old model and mounting new one.
-// Gives iOS WebKit time to release GPU resources.
-const MODEL_SWAP_DELAY = 150;
+// Mobile gets a much longer delay — iOS WebKit needs more time to reclaim VRAM.
+const SWAP_DELAY_DESKTOP = 150;
+const SWAP_DELAY_MOBILE = 600;
 
 export default function ProjectsPage() {
   const [activePrimary, setActivePrimary] = useState(0);
@@ -44,6 +45,11 @@ export default function ProjectsPage() {
   const [modelReady, setModelReady] = useState(true);
   const contentRef = useRef<HTMLDivElement>(null);
   const secondaryBarRef = useRef<HTMLDivElement>(null);
+  const isMobileRef = useRef(false);
+
+  useEffect(() => {
+    isMobileRef.current = window.matchMedia("(max-width: 767px)").matches;
+  }, []);
 
   const { projects } = siteContent;
   const categories = projects.categories;
@@ -77,6 +83,7 @@ export default function ProjectsPage() {
       }
 
       // 3. After delay, update state and remount
+      const delay = isMobileRef.current ? SWAP_DELAY_MOBILE : SWAP_DELAY_DESKTOP;
       setTimeout(() => {
         updateFn();
         setModelReady(true);
@@ -90,7 +97,7 @@ export default function ProjectsPage() {
             );
           }
         });
-      }, MODEL_SWAP_DELAY);
+      }, delay);
     },
     [],
   );

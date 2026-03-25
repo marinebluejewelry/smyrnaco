@@ -66,16 +66,32 @@ export function ProductModel({
   // Load with Draco decompression enabled
   const { scene } = useGLTF(path, true);
 
-  // On unmount: deep-dispose GPU resources + clear drei cache
+  const gl = useThree((s) => s.gl);
+
+  // On unmount: deep-dispose GPU resources + clear drei & THREE caches
   useEffect(() => {
     const currentPath = path;
     const currentScene = scene;
 
     return () => {
+      // Log GPU memory before disposal
+      const memBefore = gl.info.memory;
+      console.log(
+        `[ProductModel] DISPOSE "${currentPath}" — before: ${memBefore.geometries} geom, ${memBefore.textures} tex`,
+      );
+
       disposeScene(currentScene);
       useGLTF.clear(currentPath);
+
+      // Also clear THREE.js internal HTTP response cache
+      THREE.Cache.clear();
+
+      const memAfter = gl.info.memory;
+      console.log(
+        `[ProductModel] DISPOSE complete — after: ${memAfter.geometries} geom, ${memAfter.textures} tex`,
+      );
     };
-  }, [path, scene]);
+  }, [path, scene, gl]);
 
   // Responsive layout
   const isMobile = viewport.width < 6;
