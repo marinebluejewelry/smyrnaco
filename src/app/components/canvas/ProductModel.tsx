@@ -10,25 +10,11 @@ import type { Group } from "three";
 // ---------------------------------------------------------------------------
 // ProductModel — loads a Draco-compressed .glb from /public/models/.
 //
-// HOW TO USE:
-//   1. Compress your .glb with Draco:
-//        npx gltf-pipeline -i model.glb -o model-draco.glb --draco.compressionLevel 7
-//      or use https://gltf.report/ (drag & drop → compress → download)
-//
-//   2. Place the compressed file in /public/models/
-//        e.g.  public/models/product.glb
-//
-//   3. In data.ts, set:  modelPath: "/models/product.glb"
-//
-//   4. Swap <Model /> for <ProductModel /> in Scene.tsx:
-//        <ProductModel
-//          path="/models/product.glb"
-//          scrollProgress={scrollProgress}
-//        />
-//
-// The `useDraco: true` flag tells drei to auto-load the Draco WASM decoder
-// from a CDN (Google's public decoder). For self-hosted decoders, pass a
-// string path instead:  useGLTF(path, "/draco/")
+// GPU Memory Strategy:
+//   On UNMOUNT, this component deep-disposes all geometries, materials, and
+//   textures, then clears the drei cache. The parent (Projects page) handles
+//   the unmount→pause→remount cycle to ensure only ONE model is ever in GPU
+//   memory at a time. This prevents OOM crashes on mobile.
 // ---------------------------------------------------------------------------
 
 interface ProductModelProps {
@@ -49,47 +35,46 @@ const MOBILE = {
   scale: 0.25,
 };
 
+/** Traverse a scene graph and dispose all GPU resources */
+function disposeScene(obj: THREE.Object3D) {
+  obj.traverse((child) => {
+    if (child instanceof THREE.Mesh) {
+      child.geometry?.dispose();
+      const materials = Array.isArray(child.material)
+        ? child.material
+        : [child.material];
+      materials.forEach((mat) => {
+        if (!mat) return;
+        // Dispose all texture maps on the material
+        Object.values(mat).forEach((val) => {
+          if (val instanceof THREE.Texture) val.dispose();
+        });
+        mat.dispose();
+      });
+    }
+  });
+}
+
 export function ProductModel({
   path,
   scrollProgress = 0,
   baseScale = 1,
 }: ProductModelProps) {
   const groupRef = useRef<Group>(null!);
-  const prevPathRef = useRef(path);
   const { viewport } = useThree();
 
   // Load with Draco decompression enabled
   const { scene } = useGLTF(path, true);
 
-  // Deep-dispose previous model's GPU resources when path changes.
-  // useGLTF.clear removes from drei cache but may not fully release GPU
-  // buffers on iOS WebKit. We traverse and dispose manually.
+  // On unmount: deep-dispose GPU resources + clear drei cache
   useEffect(() => {
-    const prevPath = prevPathRef.current;
-    if (prevPath !== path) {
-      // Traverse the old scene and dispose all GPU resources
-      scene.traverse((child) => {
-        if (child instanceof THREE.Mesh) {
-          child.geometry?.dispose();
-          const materials = Array.isArray(child.material)
-            ? child.material
-            : [child.material];
-          materials.forEach((mat) => {
-            if (mat) {
-              // Dispose all texture maps
-              Object.values(mat).forEach((val) => {
-                if (val instanceof THREE.Texture) {
-                  val.dispose();
-                }
-              });
-              mat.dispose();
-            }
-          });
-        }
-      });
-      useGLTF.clear(prevPath);
-      prevPathRef.current = path;
-    }
+    const currentPath = path;
+    const currentScene = scene;
+
+    return () => {
+      disposeScene(currentScene);
+      useGLTF.clear(currentPath);
+    };
   }, [path, scene]);
 
   // Responsive layout

@@ -191,22 +191,11 @@ export function Scene({
           />
         </Environment>
 
-        {/* ── Post-processing (lighter on mobile to save GPU) ── */}
-        {isMobile ? (
-          <EffectComposer multisampling={0}>
-            <Bloom
-              intensity={0.15}
-              luminanceThreshold={0.6}
-              luminanceSmoothing={0.9}
-              mipmapBlur
-            />
-            <Vignette
-              blendFunction={BlendFunction.NORMAL}
-              offset={0.3}
-              darkness={0.45}
-            />
-          </EffectComposer>
-        ) : (
+        {/* ── Post-processing — desktop only ──────────────────── */}
+        {/* Skipped entirely on mobile: EffectComposer allocates    */}
+        {/* multiple full-screen framebuffers that exhaust mobile    */}
+        {/* GPU memory when combined with 3D models.                 */}
+        {!isMobile && (
           <EffectComposer multisampling={4}>
             <Bloom
               intensity={0.35}

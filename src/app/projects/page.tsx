@@ -11,13 +11,11 @@ import { WebGLErrorBoundary } from "@/app/components/dom/WebGLErrorBoundary";
 // ---------------------------------------------------------------------------
 // Projects — 50/50 split with two-level tab navigation + 3D model viewer.
 //
-// Desktop: primary category tabs + secondary project tabs + text on left,
-//          interactive 3D model viewer on right.
-// Mobile:  vertical 50/50 — tabs+text top (scrollable), 3D model bottom.
-//
-// Primary tabs: Bracelets, Necklaces, Earrings (static categories).
-// Secondary tabs: dynamic per category. Prev/Next buttons navigate within
-// the active category.
+// Model swap strategy (critical for mobile GPU memory):
+//   1. User clicks a tab → Scene is UNMOUNTED (modelReady = false)
+//   2. After a 150ms pause (GPU releases resources), new path is set
+//   3. Scene REMOUNTS with the new model (modelReady = true)
+//   This ensures only ONE model is ever in GPU memory at a time.
 // ---------------------------------------------------------------------------
 
 const Scene = dynamic(
@@ -33,9 +31,14 @@ const ProductModel = dynamic(
   { ssr: false },
 );
 
+// Delay in ms between unmounting old model and mounting new one.
+// Gives iOS WebKit time to release GPU resources.
+const MODEL_SWAP_DELAY = 150;
+
 export default function ProjectsPage() {
   const [activePrimary, setActivePrimary] = useState(0);
   const [activeSecondary, setActiveSecondary] = useState(0);
+  const [modelReady, setModelReady] = useState(true);
   const contentRef = useRef<HTMLDivElement>(null);
   const secondaryBarRef = useRef<HTMLDivElement>(null);
 
@@ -54,31 +57,37 @@ export default function ProjectsPage() {
     }
   }, [activeSecondary]);
 
-  // Animate content transition
-  const animateContentSwap = useCallback(
-    (callback: () => void) => {
-      if (!contentRef.current) {
-        callback();
-        return;
+  // Staged model swap: unmount → pause → update state → remount
+  const swapModel = useCallback(
+    (updateFn: () => void) => {
+      // 1. Unmount the current Scene (releases GPU resources)
+      setModelReady(false);
+
+      // 2. Animate text out
+      if (contentRef.current) {
+        gsap.to(contentRef.current, {
+          opacity: 0,
+          y: -15,
+          duration: 0.3,
+          ease: "power3.in",
+        });
       }
-      gsap.to(contentRef.current, {
-        opacity: 0,
-        y: -15,
-        duration: 0.3,
-        ease: "power3.in",
-        onComplete: () => {
-          callback();
-          requestAnimationFrame(() => {
-            if (contentRef.current) {
-              gsap.fromTo(
-                contentRef.current,
-                { opacity: 0, y: 20 },
-                { opacity: 1, y: 0, duration: 0.4, ease: "power3.out" },
-              );
-            }
-          });
-        },
-      });
+
+      // 3. After delay, update state and remount
+      setTimeout(() => {
+        updateFn();
+        setModelReady(true);
+
+        requestAnimationFrame(() => {
+          if (contentRef.current) {
+            gsap.fromTo(
+              contentRef.current,
+              { opacity: 0, y: 20 },
+              { opacity: 1, y: 0, duration: 0.4, ease: "power3.out" },
+            );
+          }
+        });
+      }, MODEL_SWAP_DELAY);
     },
     [],
   );
@@ -86,22 +95,22 @@ export default function ProjectsPage() {
   const handlePrimaryChange = useCallback(
     (index: number) => {
       if (index === activePrimary) return;
-      animateContentSwap(() => {
+      swapModel(() => {
         setActivePrimary(index);
         setActiveSecondary(0);
       });
     },
-    [activePrimary, animateContentSwap],
+    [activePrimary, swapModel],
   );
 
   const handleSecondaryChange = useCallback(
     (index: number) => {
       if (index === activeSecondary) return;
-      animateContentSwap(() => {
+      swapModel(() => {
         setActiveSecondary(index);
       });
     },
-    [activeSecondary, animateContentSwap],
+    [activeSecondary, swapModel],
   );
 
   const handlePrev = useCallback(() => {
@@ -185,14 +194,16 @@ export default function ProjectsPage() {
       {/* ── Right / Bottom panel — 3D model viewer ──────────────────── */}
       <div className="snap-slide snap-slide--media relative">
         <LoadingOverlay />
-        <WebGLErrorBoundary>
-          <Scene interactive orbitEnabled autoRotateSpeed={1.5} enableZoom>
-            <ProductModel
-              path={modelPath(current.modelFilename)}
-              baseScale={0.2}
-            />
-          </Scene>
-        </WebGLErrorBoundary>
+        {modelReady && (
+          <WebGLErrorBoundary>
+            <Scene interactive orbitEnabled autoRotateSpeed={1.5} enableZoom>
+              <ProductModel
+                path={modelPath(current.modelFilename)}
+                baseScale={0.2}
+              />
+            </Scene>
+          </WebGLErrorBoundary>
+        )}
 
         {/* Prev / Next overlay buttons */}
         <button
