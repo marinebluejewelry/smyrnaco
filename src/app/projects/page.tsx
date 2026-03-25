@@ -9,16 +9,11 @@ import { LoadingOverlay } from "@/app/components/dom/LoadingOverlay";
 import { WebGLErrorBoundary } from "@/app/components/dom/WebGLErrorBoundary";
 
 // ---------------------------------------------------------------------------
-// Projects — 50/50 split with two-level tab navigation + 3D model viewer.
+// Projects — two-level tab navigation + 3D model viewer.
 //
-// Model swap strategy (critical for mobile GPU memory):
-//   The Scene (Canvas + WebGL context) stays mounted for the page lifetime.
-//   Only the ProductModel child is unmounted/remounted on tab switch:
-//   1. User clicks a tab → ProductModel unmounts (disposes GPU resources)
-//   2. After a 150ms pause (GPU reclaims memory), new path is set
-//   3. ProductModel remounts with the new .glb
-//   This avoids WebGL context create/destroy cycles that leak GPU memory
-//   on iOS Safari.
+// Desktop: full single-page experience with model swapping inside one Canvas.
+// Mobile:  tabs navigate to /projects/[id] subpages (hard navigation) so each
+//          model loads in a fresh browser context, avoiding iOS OOM crashes.
 // ---------------------------------------------------------------------------
 
 const Scene = dynamic(
@@ -34,21 +29,18 @@ const ProductModel = dynamic(
   { ssr: false },
 );
 
-// Delay in ms between unmounting old model and mounting new one.
-// Mobile gets a much longer delay — iOS WebKit needs more time to reclaim VRAM.
 const SWAP_DELAY_DESKTOP = 150;
-const SWAP_DELAY_MOBILE = 1000;
 
 export default function ProjectsPage() {
   const [activePrimary, setActivePrimary] = useState(0);
   const [activeSecondary, setActiveSecondary] = useState(0);
   const [modelReady, setModelReady] = useState(true);
+  const [isMobile, setIsMobile] = useState<boolean | null>(null);
   const contentRef = useRef<HTMLDivElement>(null);
   const secondaryBarRef = useRef<HTMLDivElement>(null);
-  const isMobileRef = useRef(false);
 
   useEffect(() => {
-    isMobileRef.current = window.matchMedia("(max-width: 767px)").matches;
+    setIsMobile(window.matchMedia("(max-width: 767px)").matches);
   }, []);
 
   const { projects } = siteContent;
@@ -66,13 +58,11 @@ export default function ProjectsPage() {
     }
   }, [activeSecondary]);
 
-  // Staged model swap: unmount → pause → update state → remount
+  // Desktop: staged model swap (unmount → pause → remount)
   const swapModel = useCallback(
     (updateFn: () => void) => {
-      // 1. Unmount ProductModel (releases GPU resources, context stays alive)
       setModelReady(false);
 
-      // 2. Animate text out
       if (contentRef.current) {
         gsap.to(contentRef.current, {
           opacity: 0,
@@ -82,8 +72,6 @@ export default function ProjectsPage() {
         });
       }
 
-      // 3. After delay, update state and remount
-      const delay = isMobileRef.current ? SWAP_DELAY_MOBILE : SWAP_DELAY_DESKTOP;
       setTimeout(() => {
         updateFn();
         setModelReady(true);
@@ -97,7 +85,7 @@ export default function ProjectsPage() {
             );
           }
         });
-      }, delay);
+      }, SWAP_DELAY_DESKTOP);
     },
     [],
   );
@@ -105,14 +93,21 @@ export default function ProjectsPage() {
   const handlePrimaryChange = useCallback(
     (index: number) => {
       if (index === activePrimary) return;
+      if (isMobile) {
+        // Mobile: just switch category, first tab will be a link
+        setActivePrimary(index);
+        setActiveSecondary(0);
+        return;
+      }
       swapModel(() => {
         setActivePrimary(index);
         setActiveSecondary(0);
       });
     },
-    [activePrimary, swapModel],
+    [activePrimary, isMobile, swapModel],
   );
 
+  // Desktop: swap model in-page
   const handleSecondaryChange = useCallback(
     (index: number) => {
       if (index === activeSecondary) return;
@@ -121,6 +116,14 @@ export default function ProjectsPage() {
       });
     },
     [activeSecondary, swapModel],
+  );
+
+  // Mobile: navigate to subpage (hard navigation)
+  const handleMobileTabClick = useCallback(
+    (tabId: string) => {
+      window.location.href = `/projects/${tabId}`;
+    },
+    [],
   );
 
   const handlePrev = useCallback(() => {
@@ -173,7 +176,11 @@ export default function ProjectsPage() {
           {tabs.map((tab, i) => (
             <button
               key={tab.id}
-              onClick={() => handleSecondaryChange(i)}
+              onClick={() =>
+                isMobile
+                  ? handleMobileTabClick(tab.id)
+                  : handleSecondaryChange(i)
+              }
               className={`
                 pb-2 text-[0.65rem] uppercase tracking-[0.3em] transition-all duration-300
                 ${i === activeSecondary
@@ -201,33 +208,51 @@ export default function ProjectsPage() {
         </div>
       </div>
 
-      {/* ── Right / Bottom panel — 3D model viewer ──────────────────── */}
+      {/* ── Right / Bottom panel ───────────────────────────────────── */}
       <div className="snap-slide snap-slide--media relative">
-        <LoadingOverlay />
-        <WebGLErrorBoundary>
-          <Scene interactive orbitEnabled autoRotateSpeed={1.5} enableZoom>
-            {modelReady && (
-              <ProductModel
-                path={modelPath(current.modelFilename)}
-                baseScale={0.2}
-              />
-            )}
-          </Scene>
-        </WebGLErrorBoundary>
+        {isMobile ? (
+          /* Mobile: prompt to select — no 3D canvas, zero GPU usage */
+          <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 px-8">
+            <p
+              className="text-lg font-light text-white/60 text-center"
+              style={{ fontFamily: "var(--font-serif)" }}
+            >
+              Select a piece to explore in 3D
+            </p>
+            <p className="text-[0.6rem] uppercase tracking-[0.3em] text-white/20 text-center">
+              Each model opens on its own page for the best experience
+            </p>
+          </div>
+        ) : (
+          /* Desktop: full 3D experience */
+          <>
+            <LoadingOverlay />
+            <WebGLErrorBoundary>
+              <Scene interactive orbitEnabled autoRotateSpeed={1.5} enableZoom>
+                {modelReady && (
+                  <ProductModel
+                    path={modelPath(current.modelFilename)}
+                    baseScale={0.2}
+                  />
+                )}
+              </Scene>
+            </WebGLErrorBoundary>
 
-        {/* Prev / Next overlay buttons */}
-        <button
-          onClick={handlePrev}
-          className="absolute left-4 top-1/2 -translate-y-1/2 z-10 border border-white/15 bg-black/60 backdrop-blur-sm px-3 py-2 text-[0.6rem] uppercase tracking-[0.2em] text-white/50 transition-all duration-300 hover:bg-white/10 hover:text-white hover:border-white/30"
-        >
-          ← Prev
-        </button>
-        <button
-          onClick={handleNext}
-          className="absolute right-4 top-1/2 -translate-y-1/2 z-10 border border-white/15 bg-black/60 backdrop-blur-sm px-3 py-2 text-[0.6rem] uppercase tracking-[0.2em] text-white/50 transition-all duration-300 hover:bg-white/10 hover:text-white hover:border-white/30"
-        >
-          Next →
-        </button>
+            {/* Prev / Next overlay buttons — desktop only */}
+            <button
+              onClick={handlePrev}
+              className="absolute left-4 top-1/2 -translate-y-1/2 z-10 border border-white/15 bg-black/60 backdrop-blur-sm px-3 py-2 text-[0.6rem] uppercase tracking-[0.2em] text-white/50 transition-all duration-300 hover:bg-white/10 hover:text-white hover:border-white/30"
+            >
+              ← Prev
+            </button>
+            <button
+              onClick={handleNext}
+              className="absolute right-4 top-1/2 -translate-y-1/2 z-10 border border-white/15 bg-black/60 backdrop-blur-sm px-3 py-2 text-[0.6rem] uppercase tracking-[0.2em] text-white/50 transition-all duration-300 hover:bg-white/10 hover:text-white hover:border-white/30"
+            >
+              Next →
+            </button>
+          </>
+        )}
       </div>
     </div>
   );

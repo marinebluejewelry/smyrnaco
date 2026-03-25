@@ -464,3 +464,31 @@ const siteContent: SiteContent = {
 };
 
 export default siteContent;
+
+// ── Flat project tab helpers (used by per-model subpages) ──────────────────
+
+export interface FlatProjectTab extends ProjectTab {
+  categoryLabel: string;
+  categoryId: string;
+  globalIndex: number;
+}
+
+export function getFlatProjectTabs(): FlatProjectTab[] {
+  const flat: FlatProjectTab[] = [];
+  let idx = 0;
+  for (const cat of siteContent.projects.categories) {
+    for (const tab of cat.tabs) {
+      flat.push({
+        ...tab,
+        categoryLabel: cat.label,
+        categoryId: cat.id,
+        globalIndex: idx++,
+      });
+    }
+  }
+  return flat;
+}
+
+export function getProjectTabById(id: string): FlatProjectTab | undefined {
+  return getFlatProjectTabs().find((t) => t.id === id);
+}
