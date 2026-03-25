@@ -7,13 +7,15 @@ import siteContent from "@/app/lib/data";
 import { modelPath } from "@/app/lib/models";
 
 // ---------------------------------------------------------------------------
-// Projects — 50/50 split with tab navigation + 3D model viewer.
+// Projects — 50/50 split with two-level tab navigation + 3D model viewer.
 //
-// Desktop: tabs + text on left, interactive 3D model viewer on right.
+// Desktop: primary category tabs + secondary project tabs + text on left,
+//          interactive 3D model viewer on right.
 // Mobile:  vertical 50/50 — tabs+text top (scrollable), 3D model bottom.
 //
-// 10 project tabs, each loading a .glb model. Prev/Next overlay buttons
-// on the media panel sync with the tab bar.
+// Primary tabs: Bracelets, Necklaces, Earrings (static categories).
+// Secondary tabs: dynamic per category. Prev/Next buttons navigate within
+// the active category.
 // ---------------------------------------------------------------------------
 
 const Scene = dynamic(
@@ -30,35 +32,40 @@ const ProductModel = dynamic(
 );
 
 export default function ProjectsPage() {
-  const [activeTab, setActiveTab] = useState(0);
+  const [activePrimary, setActivePrimary] = useState(0);
+  const [activeSecondary, setActiveSecondary] = useState(0);
   const contentRef = useRef<HTMLDivElement>(null);
-  const tabBarRef = useRef<HTMLDivElement>(null);
+  const secondaryBarRef = useRef<HTMLDivElement>(null);
 
   const { projects } = siteContent;
-  const tabs = projects.tabs;
-  const current = tabs[activeTab];
+  const categories = projects.categories;
+  const activeCategory = categories[activePrimary];
+  const tabs = activeCategory.tabs;
+  const current = tabs[activeSecondary];
 
-  // Auto-scroll active tab into view
+  // Auto-scroll active secondary tab into view
   useEffect(() => {
-    if (!tabBarRef.current) return;
-    const activeBtn = tabBarRef.current.children[activeTab] as HTMLElement;
+    if (!secondaryBarRef.current) return;
+    const activeBtn = secondaryBarRef.current.children[activeSecondary] as HTMLElement;
     if (activeBtn) {
       activeBtn.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
     }
-  }, [activeTab]);
+  }, [activeSecondary]);
 
-  const handleTabChange = useCallback(
-    (index: number) => {
-      if (index === activeTab || !contentRef.current) return;
-
+  // Animate content transition
+  const animateContentSwap = useCallback(
+    (callback: () => void) => {
+      if (!contentRef.current) {
+        callback();
+        return;
+      }
       gsap.to(contentRef.current, {
         opacity: 0,
         y: -15,
         duration: 0.3,
         ease: "power3.in",
         onComplete: () => {
-          setActiveTab(index);
-
+          callback();
           requestAnimationFrame(() => {
             if (contentRef.current) {
               gsap.fromTo(
@@ -71,16 +78,37 @@ export default function ProjectsPage() {
         },
       });
     },
-    [activeTab],
+    [],
+  );
+
+  const handlePrimaryChange = useCallback(
+    (index: number) => {
+      if (index === activePrimary) return;
+      animateContentSwap(() => {
+        setActivePrimary(index);
+        setActiveSecondary(0);
+      });
+    },
+    [activePrimary, animateContentSwap],
+  );
+
+  const handleSecondaryChange = useCallback(
+    (index: number) => {
+      if (index === activeSecondary) return;
+      animateContentSwap(() => {
+        setActiveSecondary(index);
+      });
+    },
+    [activeSecondary, animateContentSwap],
   );
 
   const handlePrev = useCallback(() => {
-    handleTabChange((activeTab - 1 + tabs.length) % tabs.length);
-  }, [activeTab, tabs.length, handleTabChange]);
+    handleSecondaryChange((activeSecondary - 1 + tabs.length) % tabs.length);
+  }, [activeSecondary, tabs.length, handleSecondaryChange]);
 
   const handleNext = useCallback(() => {
-    handleTabChange((activeTab + 1) % tabs.length);
-  }, [activeTab, tabs.length, handleTabChange]);
+    handleSecondaryChange((activeSecondary + 1) % tabs.length);
+  }, [activeSecondary, tabs.length, handleSecondaryChange]);
 
   return (
     <div className="snap-container">
@@ -91,24 +119,43 @@ export default function ProjectsPage() {
         </p>
 
         <h1
-          className="mb-10 text-3xl md:text-5xl font-light leading-tight tracking-tight text-white"
+          className="mb-8 text-3xl md:text-5xl font-light leading-tight tracking-tight text-white"
           style={{ fontFamily: "var(--font-serif)" }}
         >
           {projects.headline}
         </h1>
 
-        {/* Tab bar */}
+        {/* Primary tab bar — categories */}
+        <div className="mb-6 flex w-full gap-6 border-b border-white/10 pb-3">
+          {categories.map((cat, i) => (
+            <button
+              key={cat.id}
+              onClick={() => handlePrimaryChange(i)}
+              className={`
+                pb-2 text-xs md:text-sm uppercase tracking-[0.2em] transition-all duration-300
+                ${i === activePrimary
+                  ? "text-white border-b-2 border-white"
+                  : "text-white/30 hover:text-white/60"
+                }
+              `}
+            >
+              {cat.label}
+            </button>
+          ))}
+        </div>
+
+        {/* Secondary tab bar — projects within category */}
         <div
-          ref={tabBarRef}
-          className="steps-scrollbar mb-10 flex w-full overflow-x-auto gap-2 border-b border-white/10 pb-3 whitespace-nowrap"
+          ref={secondaryBarRef}
+          className="steps-scrollbar mb-10 flex w-full overflow-x-auto gap-2 border-b border-white/5 pb-3 whitespace-nowrap"
         >
           {tabs.map((tab, i) => (
             <button
               key={tab.id}
-              onClick={() => handleTabChange(i)}
+              onClick={() => handleSecondaryChange(i)}
               className={`
                 pb-2 text-[0.65rem] uppercase tracking-[0.3em] transition-all duration-300
-                ${i === activeTab
+                ${i === activeSecondary
                   ? "text-white"
                   : "text-white/35 hover:text-white/60"
                 }

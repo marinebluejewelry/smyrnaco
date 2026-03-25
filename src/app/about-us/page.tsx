@@ -16,12 +16,14 @@ gsap.registerPlugin(Observer);
 // ---------------------------------------------------------------------------
 // About Us — 50/50 split with scroll-driven bracelet assembly.
 //
-// Desktop: text left (scrollable), hint strip (vertical, between), canvas right.
-// Mobile:  media top (order:1), hint strip (horizontal, order:2), text bottom (order:3).
+// Desktop: text left (scrollable in constrained inner frame), canvas right.
+//          Floating hint box centered over the page (absolute, z-20).
+// Mobile:  media top (order:1), text bottom (order:3).
+//          Hint box floats centered.
 //
-// Text panel scroll drives bracelet assembly progress (0→1).
+// Text panel scroll drives bracelet assembly progress (0→1), smoothed via
+// GSAP interpolation to avoid jerky mouse-wheel snapping.
 // GSAP Observer on canvas handles horizontal drag rotation only.
-// Hint strip shows scroll hint initially, swaps to completion link.
 // ---------------------------------------------------------------------------
 
 const Scene = dynamic(
@@ -70,18 +72,26 @@ export default function AboutUsPage() {
   const progressRef = useRef(0);
   const rotationRef = useRef(0);
   const canvasContainerRef = useRef<HTMLDivElement>(null);
-  const textPanelRef = useRef<HTMLDivElement>(null);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
   const [isComplete, setIsComplete] = useState(false);
 
   const { aboutUs } = siteContent;
 
-  // Text scroll → bracelet progress
+  // Text scroll → bracelet progress (smoothed via GSAP tween)
   const handleScroll = useCallback(() => {
-    const el = textPanelRef.current;
+    const el = scrollContainerRef.current;
     if (!el) return;
     const scrollable = el.scrollHeight - el.clientHeight;
     if (scrollable <= 0) return;
-    progressRef.current = el.scrollTop / scrollable;
+    const targetProgress = el.scrollTop / scrollable;
+
+    // Smooth interpolation — avoids jerky mouse-wheel snapping
+    gsap.to(progressRef, {
+      current: targetProgress,
+      duration: 2.6,
+      ease: "power2.out",
+      overwrite: true,
+    });
   }, []);
 
   const handleAssemblyComplete = useCallback((complete: boolean) => {
@@ -106,14 +116,19 @@ export default function AboutUsPage() {
   }, { dependencies: [] });
 
   return (
-    <div className="snap-container">
+    <div className="snap-container relative">
       {/* ── Text panel ────────────────────────────────────────────── */}
-      <div
-        ref={textPanelRef}
-        onScroll={handleScroll}
-        className="snap-slide snap-slide--text about-us-text flex flex-col justify-start p-4 md:p-12 lg:p-16"
-      >
-        <div className="w-full max-w-xl">
+      <div className="snap-slide snap-slide--text about-us-text flex flex-col items-center justify-center p-4 md:p-12 lg:p-16">
+        {/* Desktop: constrained inner scroll frame — smaller, bordered, centered */}
+        <div
+          ref={scrollContainerRef}
+          onScroll={handleScroll}
+          className="w-full max-w-xl overflow-y-auto md:max-h-[40vh] md:border md:border-white/10 md:rounded md:p-6 lg:p-8"
+          style={{
+            scrollbarWidth: "thin",
+            scrollbarColor: "rgba(255,255,255,0.15) transparent",
+          }}
+        >
           <p className="mb-4 text-[0.6rem] uppercase tracking-[0.4em] text-white/30">
             Our Story
           </p>
@@ -134,20 +149,22 @@ export default function AboutUsPage() {
         </div>
       </div>
 
-      {/* ── Hint strip — between text and canvas ──────────────────── */}
-      <div className="about-us-hint flex-shrink-0 flex items-center justify-center bg-black/40 border-white/5 h-10 md:h-auto md:w-12 border-y md:border-y-0 md:border-x">
-        {isComplete ? (
-          <Link
-            href={aboutUs.completionHref}
-            className="text-[0.5rem] italic text-white/40 hover:text-white/70 transition-colors duration-300 md:[writing-mode:vertical-lr] md:rotate-180 text-center px-2 md:px-0 md:py-4"
-          >
-            {aboutUs.completionText}
-          </Link>
-        ) : (
-          <span className="text-[0.5rem] uppercase tracking-[0.2em] text-white/20 md:[writing-mode:vertical-lr] md:rotate-180 text-center px-2 md:px-0 md:py-4">
-            {aboutUs.scrollHint}
-          </span>
-        )}
+      {/* ── Floating hint box — at boundary between text & canvas ──── */}
+      <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 md:left-[40%] z-20 pointer-events-auto">
+        <div className="bg-black/60 backdrop-blur-sm border border-white/10 px-4 py-3 rounded">
+          {isComplete ? (
+            <Link
+              href={aboutUs.completionHref}
+              className="block text-[0.65rem] italic text-white/40 hover:text-white/70 transition-colors duration-300 text-center whitespace-nowrap"
+            >
+              {aboutUs.completionText}
+            </Link>
+          ) : (
+            <span className="block text-[0.6rem] uppercase tracking-[0.2em] text-white/20 text-center whitespace-nowrap">
+              {aboutUs.scrollHint}
+            </span>
+          )}
+        </div>
       </div>
 
       {/* ── Media panel — 3D canvas ───────────────────────────────── */}

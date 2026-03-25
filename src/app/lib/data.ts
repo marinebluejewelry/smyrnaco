@@ -73,9 +73,16 @@ export interface ProjectTab {
   modelFilename: string;
 }
 
+export interface ProjectCategory {
+  id: string;
+  /** Display label for the primary tab ("Bracelets", "Necklaces", etc.) */
+  label: string;
+  tabs: ProjectTab[];
+}
+
 export interface ProjectsContent {
   headline: string;
-  tabs: ProjectTab[];
+  categories: ProjectCategory[];
 }
 
 // ── Partners (new page) ─────────────────────────────────────────────────────
@@ -151,14 +158,6 @@ export interface SiteContent {
 // Content
 // ===========================================================================
 
-const MODEL_FILES = [
-  "yetermk_compressed.glb",
-  "bilekliktohiddeneme_compressed.glb",
-  "anka_compressed.glb",
-  "ankakolye_compressed.glb",
-  "haomabileklik_compressed.glb",
-];
-
 const siteContent: SiteContent = {
   brand: "SMYRNA",
 
@@ -180,13 +179,145 @@ const siteContent: SiteContent = {
   // ── Projects ──────────────────────────────────────────────────────────
   projects: {
     headline: "Projects",
-    tabs: Array.from({ length: 10 }, (_, i) => ({
-      id: `project-${i + 1}`,
-      tabLabel: `Project ${i + 1}`,
-      headline: `Project ${i + 1} — Title`,
-      body: "This is a placeholder description for this project. Replace with actual project details, materials used, inspiration, and craftsmanship notes.",
-      modelFilename: MODEL_FILES[i % MODEL_FILES.length],
-    })),
+    categories: [
+      {
+        id: "cat-bracelets",
+        label: "Bracelets",
+        tabs: [
+          {
+            id: "bracelet-farahavar",
+            tabLabel: "Farahavar",
+            headline: "Farahavar Bracelet",
+            body: "Inspired by the winged Faravahar symbol of ancient Persia, this bracelet translates divine guardianship into wearable form. Precision-cast wings unfurl from a central disc, finished with hand-polished edges that catch light at every angle.",
+            modelFilename: "farahavar-bracelet_compressed.glb",
+          },
+          {
+            id: "bracelet-haoma",
+            tabLabel: "Haoma",
+            headline: "Haoma Bracelet",
+            body: "The sacred Haoma plant — revered across Anatolian and Persian traditions — becomes the foundation for this organic bracelet design. Flowing botanical forms are rendered in precious metal through lost-wax casting, creating a piece that feels alive on the wrist.",
+            modelFilename: "haoma-bracelet_compressed.glb",
+          },
+          {
+            id: "bracelet-hitit-revize",
+            tabLabel: "Hitit Revize",
+            headline: "Hitit Revize Bracelet",
+            body: "A contemporary reinterpretation of Hittite solar disc motifs. The Revize edition refines the original design language with cleaner geometry and a thinner profile, achieving a balance between archaeological authenticity and modern wearability.",
+            modelFilename: "hitit-revize-bracelet_compressed.glb",
+          },
+          {
+            id: "bracelet-kanatli-gunes",
+            tabLabel: "Kanatlı Güneş",
+            headline: "Kanatlı Güneş Bracelet",
+            body: "The Winged Sun — a symbol shared by civilisations from Egypt to Mesopotamia — is reimagined here as a statement bracelet. Radiating feather-work surrounds a central cabochon, each plume individually sculpted before assembly.",
+            modelFilename: "kanatli-gunes-bracelet_compressed.glb",
+          },
+          {
+            id: "bracelet-simurg",
+            tabLabel: "Simurg",
+            headline: "Simurg Bracelet",
+            body: "Named after the mythical bird of Persian legend, the Simurg bracelet features interlocking feather motifs that wrap the wrist in continuous movement. Each link articulates independently, creating a fluid silhouette that shifts with every gesture.",
+            modelFilename: "simurg-bracelet_compressed.glb",
+          },
+          {
+            id: "bracelet-tas-yildiz",
+            tabLabel: "Taş Yıldız",
+            headline: "Taş Yıldız Bracelet",
+            body: "Stone Star — where gemstone settings are arranged in celestial patterns across a structured bracelet band. Each stone is bezel-set by hand, creating constellations that map ancient Anatolian star charts onto the wrist.",
+            modelFilename: "tas-yildiz-bracelet_compressed.glb",
+          },
+        ],
+      },
+      {
+        id: "cat-necklaces",
+        label: "Necklaces",
+        tabs: [
+          {
+            id: "necklace-farahavar",
+            tabLabel: "Farahavar",
+            headline: "Farahavar Necklace",
+            body: "The Faravahar pendant hangs from a hand-linked chain, each connection forged and closed individually. The winged figure sits at the sternum — a guardian symbol transformed into a centrepiece of quiet authority.",
+            modelFilename: "farahavar-necklace_compressed.glb",
+          },
+          {
+            id: "necklace-hitit-revize",
+            tabLabel: "Hitit Revize",
+            headline: "Hitit Revize Necklace",
+            body: "Hittite sun imagery is distilled into a refined pendant necklace. The revised proportions sit closer to the collarbone, offering a subtler presence than its bracelet counterpart while maintaining the same archaeological depth.",
+            modelFilename: "hitit-revize-necklace_compressed.glb",
+          },
+          {
+            id: "necklace-kanatli-gunes",
+            tabLabel: "Kanatlı Güneş",
+            headline: "Kanatlı Güneş Necklace",
+            body: "The Winged Sun descends from a delicate chain as a statement pendant. Layered metalwork creates dimensional depth — the wings appear to lift away from the body, casting micro-shadows that shift throughout the day.",
+            modelFilename: "kanatli-gunes-necklace_compressed.glb",
+          },
+          {
+            id: "necklace-simurg",
+            tabLabel: "Simurg",
+            headline: "Simurg Necklace",
+            body: "The mythical Simurg takes flight as a sculptural pendant. Overlapping feather elements create a three-dimensional relief that catches light from every direction, suspended from an articulated chain that follows the neckline naturally.",
+            modelFilename: "simurg-necklace_compressed.glb",
+          },
+          {
+            id: "necklace-tas-yildiz",
+            tabLabel: "Taş Yıldız",
+            headline: "Taş Yıldız Necklace",
+            body: "Celestial geometry meets pendant design. The Taş Yıldız necklace arranges gemstones in star formations around a central motif, each stone selected for colour consistency and set in precision-machined bezels.",
+            modelFilename: "tas-yildiz-necklace_compressed.glb",
+          },
+        ],
+      },
+      {
+        id: "cat-earrings",
+        label: "Earrings",
+        tabs: [
+          {
+            id: "earring-anahita",
+            tabLabel: "Anahita",
+            headline: "Anahita Earrings",
+            body: "Named after the ancient goddess of water and wisdom, the Anahita earrings cascade in layered drops that evoke flowing water. Lightweight construction ensures all-day comfort without sacrificing the visual weight of the design.",
+            modelFilename: "anahita-earrings_compressed.glb",
+          },
+          {
+            id: "earring-haoma",
+            tabLabel: "Haoma",
+            headline: "Haoma Earrings",
+            body: "Botanical elegance distilled into earring form. The Haoma earrings feature organic leaf and stem motifs, each element individually cast and assembled to create natural movement as they hang from the ear.",
+            modelFilename: "haoma-earrings_compressed.glb",
+          },
+          {
+            id: "earring-hitit-revize",
+            tabLabel: "Hitit Revize",
+            headline: "Hitit Revize Earrings",
+            body: "Miniature solar discs rendered with the same precision as their larger bracelet and necklace counterparts. The revised Hittite motif is scaled to earring proportions without losing any of its symbolic detail.",
+            modelFilename: "hitit-revize-earrings_compressed.glb",
+          },
+          {
+            id: "earring-hitit-sembol",
+            tabLabel: "Hitit Sembol",
+            headline: "Hitit Sembol Earrings",
+            body: "A deeper exploration of Hittite iconography. The Sembol earrings feature sacred symbols drawn from archaeological reliefs, each glyph hand-engraved into the metal surface before final polishing.",
+            modelFilename: "hitit-sembol-earrings_compressed.glb",
+          },
+          {
+            id: "earring-hitit-spiral",
+            tabLabel: "Hitit Spiral",
+            headline: "Hitit Spiral Earrings",
+            body: "The eternal spiral — one of humanity's oldest decorative motifs — is reinterpreted through Hittite design sensibility. These earrings coil from a central post, creating a hypnotic visual rhythm that draws the eye inward.",
+            modelFilename: "hitit-spiral-earrings_compressed.glb",
+          },
+          {
+            id: "earring-simurg",
+            tabLabel: "Simurg",
+            headline: "Simurg Earrings",
+            body: "The Simurg's feathers become delicate drop earrings. Each plume is individually articulated, allowing natural sway and light play. A sculptural interpretation of the mythical bird, scaled for the ear.",
+            modelFilename: "simurg-earrings_compressed.glb",
+          },
+        ],
+      },
+    ],
   },
 
   // ── Partners ──────────────────────────────────────────────────────────

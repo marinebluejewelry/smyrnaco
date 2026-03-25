@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useCallback } from "react";
+import { useEffect, useRef } from "react";
 import Image from "next/image";
 import gsap from "gsap";
 // @ts-ignore — GSAP types casing conflict on Windows
@@ -12,14 +12,13 @@ import type { MediaImage } from "@/app/lib/data";
 gsap.registerPlugin(Draggable, InertiaPlugin);
 
 // ---------------------------------------------------------------------------
-// Carousel — standalone infinite drag carousel with 3:4 aspect-ratio slides.
+// Carousel — bounded drag carousel with 3:4 aspect-ratio slides.
 //
-// Extracted from MediaShowcase for embedding inside snap-slide--media panels.
-// Interaction: GSAP Draggable + InertiaPlugin with snap-to-slide.
-// Fills its parent container.
+// No infinite loop. Draggable with hard bounds: first slide locks at the left
+// edge, last slide locks at the right edge. Rubber-band edge resistance gives
+// a tactile feel when hitting the ends.
 // ---------------------------------------------------------------------------
 
-const CLONE_COUNT = 3;
 const GAP = 16;
 
 interface CarouselProps {
@@ -31,79 +30,46 @@ export function Carousel({ images }: CarouselProps) {
   const trackRef = useRef<HTMLDivElement>(null!);
   const draggableRef = useRef<Draggable[]>([]);
 
-  // Build looped slide array
-  const totalClones = CLONE_COUNT * 2 + 1;
-  const slides: MediaImage[] = [];
-  for (let c = 0; c < totalClones; c++) {
-    images.forEach((img) => slides.push(img));
-  }
-
-  const getSetWidth = useCallback(() => {
-    if (!trackRef.current) return 0;
-    const slideEl = trackRef.current.querySelector<HTMLElement>("[data-slide]");
-    if (!slideEl) return 0;
-    return (slideEl.offsetWidth + GAP) * images.length;
-  }, [images.length]);
-
-  const wrapPosition = useCallback(() => {
-    if (!trackRef.current || !draggableRef.current[0]) return;
-    const setW = getSetWidth();
-    if (setW === 0) return;
-
-    const d = draggableRef.current[0];
-    const x = d.x;
-    const centerOffset = -CLONE_COUNT * setW;
-
-    if (x > centerOffset + setW) {
-      gsap.set(trackRef.current, { x: x - setW });
-      d.update(true);
-    } else if (x < centerOffset - setW) {
-      gsap.set(trackRef.current, { x: x + setW });
-      d.update(true);
-    }
-  }, [getSetWidth]);
-
   useEffect(() => {
-    const ctx = gsap.context(() => {
-      const setW = getSetWidth();
-      if (setW === 0) return;
+    if (!trackRef.current || !containerRef.current) return;
 
-      const startX = -CLONE_COUNT * setW;
-      gsap.set(trackRef.current, { x: startX });
+    const slideEls = trackRef.current.querySelectorAll<HTMLElement>("[data-slide]");
+    if (slideEls.length === 0) return;
 
-      const slideWidth =
-        trackRef.current.querySelector<HTMLElement>("[data-slide]")!
-          .offsetWidth + GAP;
+    const slideWidth = slideEls[0].offsetWidth + GAP;
+    const trackWidth = slideWidth * images.length - GAP; // total track (no trailing gap)
+    const containerWidth = containerRef.current.offsetWidth;
 
-      draggableRef.current = Draggable.create(trackRef.current, {
-        type: "x",
-        inertia: true,
-        edgeResistance: 0.65,
-        snap: {
-          x: (val: number) => Math.round(val / slideWidth) * slideWidth,
-        },
-        onDrag: wrapPosition,
-        onThrowUpdate: wrapPosition,
-        onThrowComplete: wrapPosition,
-        cursor: "grab",
-        activeCursor: "grabbing",
-      });
-    }, containerRef);
+    // Max drag: 0 (first slide flush left)
+    // Min drag: negative overflow (last slide flush right), or 0 if content fits
+    const minX = Math.min(0, -(trackWidth - containerWidth));
+    const maxX = 0;
+
+    draggableRef.current = Draggable.create(trackRef.current, {
+      type: "x",
+      inertia: true,
+      bounds: { minX, maxX },
+      edgeResistance: 0.85,
+      snap: {
+        x: (val: number) => Math.round(val / slideWidth) * slideWidth,
+      },
+      cursor: "grab",
+      activeCursor: "grabbing",
+    });
 
     return () => {
       draggableRef.current.forEach((d) => d.kill());
-      ctx.revert();
     };
-  }, [getSetWidth, wrapPosition]);
+  }, [images.length]);
 
   return (
     <div ref={containerRef} className="absolute inset-0 flex items-center overflow-hidden">
       <div
         ref={trackRef}
         className="carousel-track flex"
-        style={{ gap: `${GAP}px` }}
+        style={{ gap: `${GAP}px`, paddingLeft: "24px", paddingRight: "24px" }}
       >
-        {slides.map((img, i) => (
+        {images.map((img, i) => (
           <div
             key={`${img.id}-${i}`}
             data-slide

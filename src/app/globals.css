@@ -164,7 +164,7 @@ canvas:active {
   overflow: hidden;
 }
 
-/* Desktop: horizontal 50/50, natural order */
+/* Desktop: horizontal 50/50 (default), natural order */
 @media (min-width: 768px) {
   .snap-container {
     flex-direction: row;
@@ -185,6 +185,16 @@ canvas:active {
   }
   .snap-slide--media {
     overflow: hidden;
+  }
+
+  /* About Us override: 33/66 favoring the animation canvas */
+  .about-us-text.snap-slide--text {
+    flex: 0 0 40%;
+    width: 40%;
+  }
+  .about-us-media.snap-slide--media {
+    flex: 0 0 60%;
+    width: 60%;
   }
 }
 
@@ -213,17 +223,13 @@ canvas:active {
 }
 
 /* ------------------------------------------------------------------ */
-/* About Us — three-panel order overrides (mobile)                     */
-/* Mobile: media top (1), hint strip middle (2), text bottom (3)       */
+/* About Us — two-panel order overrides (mobile)                       */
+/* Mobile: media top (1), text bottom (3)                              */
 /* Desktop: natural source order                                       */
 /* ------------------------------------------------------------------ */
 
 .about-us-text {
   order: 3;
-}
-
-.about-us-hint {
-  order: 2;
 }
 
 .about-us-media {
@@ -232,7 +238,6 @@ canvas:active {
 
 @media (min-width: 768px) {
   .about-us-text,
-  .about-us-hint,
   .about-us-media {
     order: 0;
   }
