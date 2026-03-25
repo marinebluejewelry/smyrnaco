@@ -4,6 +4,7 @@ import { useRef, useEffect } from "react";
 import { useFrame, useThree } from "@react-three/fiber";
 import { useGLTF, Float } from "@react-three/drei";
 import { MathUtils } from "three";
+import * as THREE from "three";
 import type { Group } from "three";
 
 // ---------------------------------------------------------------------------
@@ -60,14 +61,36 @@ export function ProductModel({
   // Load with Draco decompression enabled
   const { scene } = useGLTF(path, true);
 
-  // Evict previous model from GPU cache when path changes
+  // Deep-dispose previous model's GPU resources when path changes.
+  // useGLTF.clear removes from drei cache but may not fully release GPU
+  // buffers on iOS WebKit. We traverse and dispose manually.
   useEffect(() => {
     const prevPath = prevPathRef.current;
     if (prevPath !== path) {
+      // Traverse the old scene and dispose all GPU resources
+      scene.traverse((child) => {
+        if (child instanceof THREE.Mesh) {
+          child.geometry?.dispose();
+          const materials = Array.isArray(child.material)
+            ? child.material
+            : [child.material];
+          materials.forEach((mat) => {
+            if (mat) {
+              // Dispose all texture maps
+              Object.values(mat).forEach((val) => {
+                if (val instanceof THREE.Texture) {
+                  val.dispose();
+                }
+              });
+              mat.dispose();
+            }
+          });
+        }
+      });
       useGLTF.clear(prevPath);
       prevPathRef.current = path;
     }
-  }, [path]);
+  }, [path, scene]);
 
   // Responsive layout
   const isMobile = viewport.width < 6;

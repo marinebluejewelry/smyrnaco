@@ -91,6 +91,25 @@ export function Scene({
         height: "100%",
         pointerEvents: interactive ? "auto" : "none",
       }}
+      onCreated={({ gl }) => {
+        // Log GPU info for mobile debugging
+        const info = gl.getContext().getExtension("WEBGL_debug_renderer_info");
+        if (info) {
+          const renderer = gl.getContext().getParameter(info.UNMASKED_RENDERER_WEBGL);
+          console.warn(`[Scene] GPU: ${renderer}`);
+        }
+        console.warn(`[Scene] Max texture: ${gl.capabilities.maxTextureSize}, DPR: ${gl.getPixelRatio()}`);
+
+        // Listen for WebGL context loss
+        const canvas = gl.domElement;
+        canvas.addEventListener("webglcontextlost", (e) => {
+          e.preventDefault();
+          console.error("[Scene] WebGL context lost — GPU memory exhausted");
+        });
+        canvas.addEventListener("webglcontextrestored", () => {
+          console.warn("[Scene] WebGL context restored");
+        });
+      }}
     >
       <Suspense fallback={null}>
         <ReadySignal onReady={onReady} />

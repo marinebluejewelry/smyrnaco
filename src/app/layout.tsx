@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter, Playfair_Display } from "next/font/google";
 import { BottomMenu } from "@/app/components/dom/BottomMenu";
 import { ShopNowCTA } from "@/app/components/dom/ShopNowCTA";
+import { MobileDebugConsole } from "@/app/components/dom/MobileDebugConsole";
 import "./globals.css";
 
 // ---------------------------------------------------------------------------
@@ -40,6 +41,7 @@ export default function RootLayout({
         </main>
         <ShopNowCTA />
         <BottomMenu />
+        <MobileDebugConsole />
       </body>
     </html>
   );
