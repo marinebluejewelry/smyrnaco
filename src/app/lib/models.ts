@@ -15,3 +15,9 @@ export function modelPath(filename: string): string {
   if (CDN_BASE) return `${CDN_BASE}/${filename}`;
   return `/models/${filename}`;
 }
+
+/** Mobile-optimised models — smaller geometry, same filenames. */
+export function mobileModelPath(filename: string): string {
+  if (CDN_BASE) return `${CDN_BASE.replace("/models", "/models-mobile")}/${filename}`;
+  return `/models-mobile/${filename}`;
+}

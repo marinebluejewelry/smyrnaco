@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
-import { modelPath } from "@/app/lib/models";
+import { mobileModelPath } from "@/app/lib/models";
 import { LoadingOverlay } from "@/app/components/dom/LoadingOverlay";
 import { WebGLErrorBoundary } from "@/app/components/dom/WebGLErrorBoundary";
 import type { FlatProjectTab } from "@/app/lib/data";
@@ -95,7 +95,7 @@ export function MobileModelView({ tab, prevId, nextId }: MobileModelViewProps) {
         <WebGLErrorBoundary>
           <Scene interactive orbitEnabled autoRotateSpeed={1.5} enableZoom>
             <ProductModel
-              path={modelPath(tab.modelFilename)}
+              path={mobileModelPath(tab.modelFilename)}
               baseScale={0.2}
             />
           </Scene>
