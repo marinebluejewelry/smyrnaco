@@ -4,16 +4,18 @@ import { useRef, useState, useCallback, useEffect } from "react";
 import dynamic from "next/dynamic";
 import gsap from "gsap";
 import siteContent from "@/app/lib/data";
-import { modelPath } from "@/app/lib/models";
+import { modelPath, mobileModelPath } from "@/app/lib/models";
 import { LoadingOverlay } from "@/app/components/dom/LoadingOverlay";
 import { WebGLErrorBoundary } from "@/app/components/dom/WebGLErrorBoundary";
 
 // ---------------------------------------------------------------------------
 // Projects — two-level tab navigation + 3D model viewer.
 //
-// Desktop: full single-page experience with model swapping inside one Canvas.
-// Mobile:  tabs navigate to /projects/[id] subpages (hard navigation) so each
-//          model loads in a fresh browser context, avoiding iOS OOM crashes.
+// Desktop: full single-page experience with model swapping (full-quality models).
+// Mobile:  same single-page experience but with optimized /models-mobile/ assets.
+//
+// ROLLBACK NOTE: If mobile OOM crashes return, switch back to subpage navigation
+// by uncommenting the "SUBPAGE FLOW" blocks and commenting out "SINGLE-PAGE FLOW".
 // ---------------------------------------------------------------------------
 
 const Scene = dynamic(
@@ -93,8 +95,13 @@ export default function ProjectsPage() {
   const handlePrimaryChange = useCallback(
     (index: number) => {
       if (index === activePrimary) return;
+      // SINGLE-PAGE FLOW: swap model in-page for both mobile and desktop
+      swapModel(() => {
+        setActivePrimary(index);
+        setActiveSecondary(0);
+      });
+      /* SUBPAGE FLOW (uncomment if mobile OOM returns):
       if (isMobile) {
-        // Mobile: just switch category, first tab will be a link
         setActivePrimary(index);
         setActiveSecondary(0);
         return;
@@ -103,11 +110,11 @@ export default function ProjectsPage() {
         setActivePrimary(index);
         setActiveSecondary(0);
       });
+      */
     },
-    [activePrimary, isMobile, swapModel],
+    [activePrimary, swapModel],
   );
 
-  // Desktop: swap model in-page
   const handleSecondaryChange = useCallback(
     (index: number) => {
       if (index === activeSecondary) return;
@@ -118,13 +125,14 @@ export default function ProjectsPage() {
     [activeSecondary, swapModel],
   );
 
-  // Mobile: navigate to subpage (hard navigation)
+  /* SUBPAGE FLOW (uncomment if mobile OOM returns):
   const handleMobileTabClick = useCallback(
     (tabId: string) => {
       window.location.href = `/projects/${tabId}`;
     },
     [],
   );
+  */
 
   const handlePrev = useCallback(() => {
     handleSecondaryChange((activeSecondary - 1 + tabs.length) % tabs.length);
@@ -176,10 +184,10 @@ export default function ProjectsPage() {
           {tabs.map((tab, i) => (
             <button
               key={tab.id}
-              onClick={() =>
-                isMobile
-                  ? handleMobileTabClick(tab.id)
-                  : handleSecondaryChange(i)
+              onClick={() => handleSecondaryChange(i)
+                /* SUBPAGE FLOW (uncomment if mobile OOM returns):
+                isMobile ? handleMobileTabClick(tab.id) : handleSecondaryChange(i)
+                */
               }
               className={`
                 pb-2 text-[0.65rem] uppercase tracking-[0.3em] transition-all duration-300
@@ -208,15 +216,39 @@ export default function ProjectsPage() {
         </div>
       </div>
 
-      {/* ── Right / Bottom panel ───────────────────────────────────── */}
+      {/* ── Right / Bottom panel — 3D model viewer ──────────────────── */}
       <div className="snap-slide snap-slide--media relative">
+        {/* SINGLE-PAGE FLOW: 3D on both mobile and desktop */}
+        <LoadingOverlay />
+        <WebGLErrorBoundary>
+          <Scene interactive orbitEnabled autoRotateSpeed={1.5} enableZoom>
+            {modelReady && (
+              <ProductModel
+                path={isMobile ? mobileModelPath(current.modelFilename) : modelPath(current.modelFilename)}
+                baseScale={0.2}
+              />
+            )}
+          </Scene>
+        </WebGLErrorBoundary>
+
+        {/* Prev / Next overlay buttons */}
+        <button
+          onClick={handlePrev}
+          className="absolute left-4 top-1/2 -translate-y-1/2 z-10 border border-white/15 bg-black/60 backdrop-blur-sm px-3 py-2 text-[0.6rem] uppercase tracking-[0.2em] text-white/50 transition-all duration-300 hover:bg-white/10 hover:text-white hover:border-white/30"
+        >
+          ← Prev
+        </button>
+        <button
+          onClick={handleNext}
+          className="absolute right-4 top-1/2 -translate-y-1/2 z-10 border border-white/15 bg-black/60 backdrop-blur-sm px-3 py-2 text-[0.6rem] uppercase tracking-[0.2em] text-white/50 transition-all duration-300 hover:bg-white/10 hover:text-white hover:border-white/30"
+        >
+          Next →
+        </button>
+
+        {/* SUBPAGE FLOW (uncomment if mobile OOM returns, and comment out above):
         {isMobile ? (
-          /* Mobile: prompt to select — no 3D canvas, zero GPU usage */
           <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 px-8">
-            <p
-              className="text-lg font-light text-white/60 text-center"
-              style={{ fontFamily: "var(--font-serif)" }}
-            >
+            <p className="text-lg font-light text-white/60 text-center" style={{ fontFamily: "var(--font-serif)" }}>
               Select a piece to explore in 3D
             </p>
             <p className="text-[0.6rem] uppercase tracking-[0.3em] text-white/20 text-center">
@@ -224,35 +256,20 @@ export default function ProjectsPage() {
             </p>
           </div>
         ) : (
-          /* Desktop: full 3D experience */
           <>
             <LoadingOverlay />
             <WebGLErrorBoundary>
               <Scene interactive orbitEnabled autoRotateSpeed={1.5} enableZoom>
                 {modelReady && (
-                  <ProductModel
-                    path={modelPath(current.modelFilename)}
-                    baseScale={0.2}
-                  />
+                  <ProductModel path={modelPath(current.modelFilename)} baseScale={0.2} />
                 )}
               </Scene>
             </WebGLErrorBoundary>
-
-            {/* Prev / Next overlay buttons — desktop only */}
-            <button
-              onClick={handlePrev}
-              className="absolute left-4 top-1/2 -translate-y-1/2 z-10 border border-white/15 bg-black/60 backdrop-blur-sm px-3 py-2 text-[0.6rem] uppercase tracking-[0.2em] text-white/50 transition-all duration-300 hover:bg-white/10 hover:text-white hover:border-white/30"
-            >
-              ← Prev
-            </button>
-            <button
-              onClick={handleNext}
-              className="absolute right-4 top-1/2 -translate-y-1/2 z-10 border border-white/15 bg-black/60 backdrop-blur-sm px-3 py-2 text-[0.6rem] uppercase tracking-[0.2em] text-white/50 transition-all duration-300 hover:bg-white/10 hover:text-white hover:border-white/30"
-            >
-              Next →
-            </button>
+            <button onClick={handlePrev} className="absolute left-4 top-1/2 -translate-y-1/2 z-10 border border-white/15 bg-black/60 backdrop-blur-sm px-3 py-2 text-[0.6rem] uppercase tracking-[0.2em] text-white/50 transition-all duration-300 hover:bg-white/10 hover:text-white hover:border-white/30">← Prev</button>
+            <button onClick={handleNext} className="absolute right-4 top-1/2 -translate-y-1/2 z-10 border border-white/15 bg-black/60 backdrop-blur-sm px-3 py-2 text-[0.6rem] uppercase tracking-[0.2em] text-white/50 transition-all duration-300 hover:bg-white/10 hover:text-white hover:border-white/30">Next →</button>
           </>
         )}
+        */}
       </div>
     </div>
   );

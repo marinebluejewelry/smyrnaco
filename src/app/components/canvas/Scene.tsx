@@ -77,9 +77,11 @@ export function Scene({
   return (
     <Canvas
       camera={{ position: [0, 0, 7], fov: 42 }}
-      dpr={[1, isMobile ? 1 : 2]}
+      /* DOWNGRADED (uncomment if mobile OOM returns): dpr={[1, isMobile ? 1 : 2]} */
+      dpr={[1, 2]}
       gl={{
-        antialias: !isMobile,
+        /* DOWNGRADED (uncomment if mobile OOM returns): antialias: !isMobile, */
+        antialias: true,
         alpha: true,
         powerPreference: "high-performance",
       }}
@@ -132,13 +134,15 @@ export function Scene({
         />
 
         {/* ── Lighting rig ─────────────────────────────────────── */}
-        <ambientLight intensity={isMobile ? 0.4 : 0.15} />
+        {/* DOWNGRADED (uncomment if mobile OOM returns): <ambientLight intensity={isMobile ? 0.4 : 0.15} /> */}
+        <ambientLight intensity={0.15} />
 
         <directionalLight
           position={[5, 8, 5]}
           intensity={2}
           color="#fff5e6"
-          castShadow={!isMobile}
+          castShadow
+          /* DOWNGRADED (uncomment if mobile OOM returns): castShadow={!isMobile} */
         />
 
         <pointLight
@@ -147,84 +151,72 @@ export function Scene({
           color="#80a0ff"
         />
 
-        {!isMobile && (
-          <pointLight
-            position={[2, -4, 3]}
-            intensity={0.4}
-            color="#ffe0c0"
-          />
-        )}
+        <pointLight
+          position={[2, -4, 3]}
+          intensity={0.4}
+          color="#ffe0c0"
+        />
+        {/* DOWNGRADED (uncomment if mobile OOM returns): wrap above pointLight in {!isMobile && (...)} */}
 
         {/* ── 3D content (provided by parent) ────────────────── */}
         {children}
 
-        {/* ── Ground shadow — desktop only ──────────────────── */}
-        {/* ContactShadows allocates a render target + geometry    */}
-        {/* that stays in GPU memory for the Scene lifetime.       */}
-        {!isMobile && (
-          <ContactShadows
-            position={[0, -2.5, 0]}
-            opacity={0.1}
-            scale={14}
-            blur={2.5}
-            far={4}
-            resolution={256}
+        {/* ── Ground shadow ────────────────────────────────────── */}
+        {/* DOWNGRADED (uncomment if mobile OOM returns): {!isMobile && ( ... )} */}
+        <ContactShadows
+          position={[0, -2.5, 0]}
+          opacity={0.4}
+          scale={14}
+          blur={2.5}
+          far={4}
+          resolution={256}
+        />
+
+        {/* ── Environment — studio HDRI for realistic reflections */}
+        {/* DOWNGRADED (uncomment if mobile OOM returns): {!isMobile && ( ... )} */}
+        <Environment resolution={256}>
+          <Lightformer
+            form="rect"
+            intensity={2}
+            position={[0, 5, -5]}
+            scale={[10, 2, 1]}
+            color="#ffffff"
           />
-        )}
+          <Lightformer
+            form="ring"
+            intensity={0.8}
+            position={[-5, 2, 1]}
+            scale={3}
+            color="#c0c8ff"
+          />
+          <Lightformer
+            form="rect"
+            intensity={0.5}
+            position={[5, -1, 3]}
+            scale={[4, 4, 1]}
+            color="#ffe8d6"
+          />
+        </Environment>
 
-        {/* ── Environment — desktop only ────────────────────── */}
-        {/* Environment cubemap (6 faces × res²) + Lightformer    */}
-        {/* geometries eat ~13 geom + 6 tex of baseline GPU mem.  */}
-        {/* On mobile, ambient + directional light is sufficient.  */}
-        {!isMobile && (
-          <Environment resolution={256}>
-            <Lightformer
-              form="rect"
-              intensity={2}
-              position={[0, 5, -5]}
-              scale={[10, 2, 1]}
-              color="#ffffff"
-            />
-            <Lightformer
-              form="ring"
-              intensity={0.8}
-              position={[-5, 2, 1]}
-              scale={3}
-              color="#c0c8ff"
-            />
-            <Lightformer
-              form="rect"
-              intensity={0.5}
-              position={[5, -1, 3]}
-              scale={[4, 4, 1]}
-              color="#ffe8d6"
-            />
-          </Environment>
-        )}
-
-        {/* ── Post-processing — desktop only ──────────────────── */}
-        {/* Skipped entirely on mobile: EffectComposer allocates    */}
-        {/* multiple full-screen framebuffers that exhaust mobile    */}
-        {/* GPU memory when combined with 3D models.                 */}
-        {!isMobile && (
-          <EffectComposer multisampling={4}>
-            <Bloom
-              intensity={0.35}
-              luminanceThreshold={0.6}
-              luminanceSmoothing={0.9}
-              mipmapBlur
-            />
-            <Noise
-              blendFunction={BlendFunction.SOFT_LIGHT}
-              opacity={0.25}
-            />
-            <Vignette
-              blendFunction={BlendFunction.NORMAL}
-              offset={0.3}
-              darkness={0.65}
-            />
-          </EffectComposer>
-        )}
+        {/* ── Post-processing ──────────────────────────────────── */}
+        {/* DOWNGRADED (uncomment if mobile OOM returns): {!isMobile && ( ... )} */}
+        <EffectComposer multisampling={4}>
+          <Bloom
+            intensity={0.35}
+            luminanceThreshold={0.6}
+            luminanceSmoothing={0.9}
+            mipmapBlur
+          />
+          <Noise
+            blendFunction={BlendFunction.SOFT_LIGHT}
+            opacity={0.25}
+          />
+          <Vignette
+            blendFunction={BlendFunction.NORMAL}
+            offset={0.3}
+            darkness={0.65}
+          />
+        </EffectComposer>
       </Suspense>
     </Canvas>
   );
