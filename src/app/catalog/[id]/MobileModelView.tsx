@@ -5,7 +5,7 @@ import dynamic from "next/dynamic";
 import { mobileModelPath } from "@/app/lib/models";
 import { LoadingOverlay } from "@/app/components/dom/LoadingOverlay";
 import { WebGLErrorBoundary } from "@/app/components/dom/WebGLErrorBoundary";
-import type { FlatProjectTab } from "@/app/lib/data";
+import type { FlatCatalogTab } from "@/app/lib/data";
 
 // ---------------------------------------------------------------------------
 // MobileModelView — single-model 3D viewer for mobile subpages.
@@ -14,7 +14,7 @@ import type { FlatProjectTab } from "@/app/lib/data";
 // uses hard <a href> links (NOT Next.js <Link>), forcing a full page reload
 // that guarantees complete browser memory reclamation on iOS.
 //
-// On desktop viewports, redirects to /projects (the single-page experience).
+// On desktop viewports, redirects to /catalog (the single-page experience).
 // ---------------------------------------------------------------------------
 
 const Scene = dynamic(
@@ -31,7 +31,7 @@ const ProductModel = dynamic(
 );
 
 interface MobileModelViewProps {
-  tab: FlatProjectTab;
+  tab: FlatCatalogTab;
   prevId: string;
   nextId: string;
 }
@@ -40,9 +40,9 @@ export function MobileModelView({ tab, prevId, nextId }: MobileModelViewProps) {
   const [isMobile, setIsMobile] = useState<boolean | null>(null);
 
   useEffect(() => {
-    const mobile = window.matchMedia("(max-width: 767px)").matches;
+    const mobile = window.matchMedia("(max-width: 1023px)").matches;
     if (!mobile) {
-      window.location.replace("/projects");
+      window.location.replace("/catalog");
       return;
     }
     setIsMobile(true);
@@ -66,10 +66,10 @@ export function MobileModelView({ tab, prevId, nextId }: MobileModelViewProps) {
         {/* Back link + category breadcrumb */}
         <div className="mb-4 flex items-center gap-3">
           <a
-            href="/projects"
+            href="/catalog"
             className="text-[0.6rem] uppercase tracking-[0.2em] text-white/40 hover:text-white/70 transition-colors duration-300"
           >
-            ← Projects
+            ← Catalog
           </a>
           <span className="text-white/15">·</span>
           <span className="text-[0.6rem] uppercase tracking-[0.2em] text-white/25">
@@ -103,13 +103,13 @@ export function MobileModelView({ tab, prevId, nextId }: MobileModelViewProps) {
 
         {/* Prev / Next — hard <a> links, NOT Next.js <Link> */}
         <a
-          href={`/projects/${prevId}`}
+          href={`/catalog/${prevId}`}
           className="absolute left-4 top-1/2 -translate-y-1/2 z-10 border border-white/15 bg-black/60 backdrop-blur-sm px-3 py-2 text-[0.6rem] uppercase tracking-[0.2em] text-white/50 transition-all duration-300 hover:bg-white/10 hover:text-white hover:border-white/30"
         >
           ← Prev
         </a>
         <a
-          href={`/projects/${nextId}`}
+          href={`/catalog/${nextId}`}
           className="absolute right-4 top-1/2 -translate-y-1/2 z-10 border border-white/15 bg-black/60 backdrop-blur-sm px-3 py-2 text-[0.6rem] uppercase tracking-[0.2em] text-white/50 transition-all duration-300 hover:bg-white/10 hover:text-white hover:border-white/30"
         >
           Next →

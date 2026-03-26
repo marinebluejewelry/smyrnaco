@@ -124,7 +124,7 @@ export default function Home() {
         ref={logoRef}
         src={home.logoSrc}
         alt={siteContent.brand}
-        className="absolute left-4 top-6 z-10 h-auto w-40 opacity-0 md:left-20 md:top-10 md:w-80"
+        className="absolute left-4 top-6 z-10 h-auto w-40 opacity-0 md:left-7 md:top-7 md:w-45"
       />
 
       {/* ── Bottom overlay — replay + headline ──────────────────────── */}

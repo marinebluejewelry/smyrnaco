@@ -71,7 +71,7 @@ export function Scene({
   // Detect mobile for reduced post-processing (saves GPU memory)
   const [isMobile, setIsMobile] = useState(false);
   useEffect(() => {
-    setIsMobile(window.matchMedia("(max-width: 767px)").matches);
+    setIsMobile(window.matchMedia("(max-width: 1023px)").matches);
   }, []);
 
   return (
@@ -165,7 +165,7 @@ export function Scene({
         {/* DOWNGRADED (uncomment if mobile OOM returns): {!isMobile && ( ... )} */}
         <ContactShadows
           position={[0, -2.5, 0]}
-          opacity={0.2}
+          opacity={0.01}
           scale={14}
           blur={8.5}
           far={4}

@@ -16,8 +16,8 @@ export default function ContactPage() {
     <div className="snap-container">
 
       {/* ── Text panel — contact info ──────────────────────────────── */}
-      <div className="snap-slide snap-slide--text flex items-start justify-start md:items-center md:justify-center p-4 md:p-12 lg:p-16">
-        <div className="w-full max-w-xl p-5 md:p-12">
+      <div className="snap-slide snap-slide--text flex items-start justify-start lg:items-center lg:justify-center p-4 lg:p-12 xl:p-16">
+        <div className="w-full max-w-xl p-5 lg:p-12">
           <p className="mb-4 text-[0.6rem] uppercase tracking-[0.4em] text-white/30">
             Get In Touch
           </p>

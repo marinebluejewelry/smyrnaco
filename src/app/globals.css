@@ -53,7 +53,7 @@ html {
 }
 
 /* Desktop: scale root font-size for proportional text sizing */
-@media (min-width: 768px) {
+@media (min-width: 1025px) {
   html { font-size: 20px; } /* ~1.25× */
 }
 
@@ -165,7 +165,7 @@ canvas:active {
 }
 
 /* Desktop: horizontal 50/50 (default), natural order */
-@media (min-width: 768px) {
+@media (min-width: 1025px) {
   .snap-container {
     flex-direction: row;
   }
@@ -189,12 +189,12 @@ canvas:active {
 
   /* About Us override: 33/66 favoring the animation canvas */
   .about-us-text.snap-slide--text {
-    flex: 0 0 40%;
-    width: 40%;
+    flex: 0 0 45%;
+    width: 45%;
   }
   .about-us-media.snap-slide--media {
-    flex: 0 0 60%;
-    width: 60%;
+    flex: 0 0 55%;
+    width: 55%;
   }
 }
 
@@ -236,7 +236,7 @@ canvas:active {
   order: 1;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 1025px) {
   .about-us-text,
   .about-us-media {
     order: 0;

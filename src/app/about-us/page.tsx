@@ -120,12 +120,12 @@ export default function AboutUsPage() {
   return (
     <div className="snap-container relative">
       {/* ── Text panel ────────────────────────────────────────────── */}
-      <div className="snap-slide snap-slide--text about-us-text flex flex-col items-center justify-center p-4 md:p-12 lg:p-16">
+      <div className="snap-slide snap-slide--text about-us-text flex flex-col items-center justify-center p-4 lg:p-12 xl:p-16">
         {/* Desktop: constrained inner scroll frame — smaller, bordered, centered */}
         <div
           ref={scrollContainerRef}
           onScroll={handleScroll}
-          className="w-full max-w-xl overflow-y-auto md:max-h-[40vh] md:border md:border-white/10 md:rounded md:p-6 lg:p-8"
+          className="w-full max-w-xl overflow-y-auto lg:max-h-[40vh] lg:border lg:border-white/10 lg:rounded lg:p-6 xl:p-8"
           style={{
             scrollbarWidth: "thin",
             scrollbarColor: "rgba(255,255,255,0.15) transparent",
@@ -149,17 +149,20 @@ export default function AboutUsPage() {
       </div>
 
       {/* ── Floating hint box — at boundary between text & canvas ──── */}
-      <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 md:left-[40%] z-20 pointer-events-auto">
+      <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 lg:left-[50%] z-20 pointer-events-auto">
         <div className="bg-black/60 backdrop-blur-sm border border-white/10 px-4 py-3 rounded">
           {isComplete ? (
             <Link
               href={aboutUs.completionHref}
-              className="block text-[0.65rem] italic text-white/40 hover:text-white/70 transition-colors duration-300 text-center whitespace-nowrap"
+              className="block text-[0.65rem] underline italic text-white hover:text-white/70 transition-colors duration-300 text-center whitespace-nowrap"
             >
               {aboutUs.completionText}
+              <span>{aboutUs.completionUnderText}</span>
             </Link>
+            
+            
           ) : (
-            <span className="block text-[0.6rem] uppercase tracking-[0.2em] text-white/20 text-center whitespace-nowrap">
+            <span className="block text-[0.6rem] uppercase tracking-[0.2em] text-white/70 text-center whitespace-nowrap">
               {aboutUs.scrollHint}
             </span>
           )}
@@ -169,11 +172,11 @@ export default function AboutUsPage() {
       {/* ── Media panel — 3D canvas ───────────────────────────────── */}
       <div
         ref={canvasContainerRef}
-        className="snap-slide snap-slide--media about-us-media relative"
+        className="snap-slide snap-slide--media about-us-media relative lg:left-20"
       >
         <LoadingOverlay />
         <WebGLErrorBoundary>
-          <Scene interactive orbitEnabled={false}>
+          <Scene interactive orbitEnabled={false} >
             <BraceletWithRotation
               progressRef={progressRef}
               rotationRef={rotationRef}

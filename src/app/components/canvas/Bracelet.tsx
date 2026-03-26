@@ -174,8 +174,8 @@ function braidBeadPosition(
 
 // ── Responsive configs ───────────────────────────────────────────────────────
 
-const DESKTOP = { position: [0.2, 0, 0] as [number, number, number], scale: 2.4 };
-const MOBILE = { position: [-0.3, 1.0, 0] as [number, number, number], scale: 1.4 };
+const DESKTOP = { position: [0, 0, 0] as [number, number, number], scale: 1.6 };
+const MOBILE = { position: [0, 0.5, 0] as [number, number, number], scale: 1.8 };
 
 // ── Props ────────────────────────────────────────────────────────────────────
 

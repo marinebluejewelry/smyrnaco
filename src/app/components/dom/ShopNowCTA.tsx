@@ -77,12 +77,12 @@ export function ShopNowCTA() {
   }, [isExpanded]);
 
   return (
-    <div className="fixed top-6 right-4 md:right-6 z-[60] flex flex-col items-end gap-2">
+    <div className="fixed top-6 right-4 lg:right-6 z-[60] flex flex-col items-end gap-2">
 
       {/* ── Mobile toggle — vertical "SHOP" tab ────────────────────── */}
       <button
         onClick={toggle}
-        className="md:hidden border border-white/15 bg-black/60 backdrop-blur-sm px-2 py-2 text-[0.6rem] uppercase tracking-[0.25em] text-white/60 transition-all duration-300 hover:bg-white/10 hover:text-white"
+        className="lg:hidden border border-white/15 bg-black/60 backdrop-blur-sm px-2 py-2 text-[0.6rem] uppercase tracking-[0.25em] text-white/60 transition-all duration-300 hover:bg-white/10 hover:text-white"
         style={{ writingMode: "horizontal-tb", textOrientation: "mixed" }}
         aria-label={isExpanded ? "Collapse shop links" : "Expand shop links"}
       >
@@ -90,16 +90,16 @@ export function ShopNowCTA() {
       </button>
 
       {/* ── Desktop: always visible label ──────────────────────────── */}
-      <span className="hidden md:block text-[0.6rem] uppercase tracking-[0.3em] text-white/50">
+      <span className="hidden lg:block text-[0.6rem] uppercase tracking-[0.3em] text-white/50">
         Shop Now!
       </span>
 
       {/* ── Expandable content — buttons ───────────────────────────── */}
       <div
         ref={contentRef}
-        className="overflow-hidden md:!h-auto md:!opacity-100"
+        className="overflow-hidden lg:!h-auto lg:!opacity-100"
       >
-        <div className="flex flex-col md:flex-row gap-2 items-end">
+        <div className="flex flex-col lg:flex-row gap-2 items-end">
           {SHOP_LINKS.map((link) => (
             <a
               key={link.label}
@@ -110,7 +110,7 @@ export function ShopNowCTA() {
                 border border-white/15 bg-black/60 backdrop-blur-sm uppercase tracking-[0.3em] text-white/70 transition-all duration-300 hover:bg-white/10 hover:text-white hover:border-white/30 text-center
                 py-2 text-[0.6rem]
                 ${link.label === "Retail"
-                  ? "px-4 md:px-4"
+                  ? "px-4 lg:px-4"
                   : "px-4"
                 }
               `}

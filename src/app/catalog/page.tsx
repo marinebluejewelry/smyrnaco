@@ -9,7 +9,7 @@ import { LoadingOverlay } from "@/app/components/dom/LoadingOverlay";
 import { WebGLErrorBoundary } from "@/app/components/dom/WebGLErrorBoundary";
 
 // ---------------------------------------------------------------------------
-// Projects — two-level tab navigation + 3D model viewer.
+// Catalog — two-level tab navigation + 3D model viewer.
 //
 // Desktop: full single-page experience with model swapping (full-quality models).
 // Mobile:  same single-page experience but with optimized /models-mobile/ assets.
@@ -33,7 +33,7 @@ const ProductModel = dynamic(
 
 const SWAP_DELAY_DESKTOP = 150;
 
-export default function ProjectsPage() {
+export default function CatalogPage() {
   const [activePrimary, setActivePrimary] = useState(0);
   const [activeSecondary, setActiveSecondary] = useState(0);
   const [modelReady, setModelReady] = useState(true);
@@ -42,11 +42,11 @@ export default function ProjectsPage() {
   const secondaryBarRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    setIsMobile(window.matchMedia("(max-width: 767px)").matches);
+    setIsMobile(window.matchMedia("(max-width: 1023px)").matches);
   }, []);
 
-  const { projects } = siteContent;
-  const categories = projects.categories;
+  const { catalog } = siteContent;
+  const categories = catalog.categories;
   const activeCategory = categories[activePrimary];
   const tabs = activeCategory.tabs;
   const current = tabs[activeSecondary];
@@ -128,7 +128,7 @@ export default function ProjectsPage() {
   /* SUBPAGE FLOW (uncomment if mobile OOM returns):
   const handleMobileTabClick = useCallback(
     (tabId: string) => {
-      window.location.href = `/projects/${tabId}`;
+      window.location.href = `/catalog/${tabId}`;
     },
     [],
   );
@@ -145,13 +145,13 @@ export default function ProjectsPage() {
   return (
     <div className="snap-container">
       {/* ── Left / Top panel — tabs + text ─────────────────────────── */}
-      <div className="snap-slide snap-slide--text flex flex-col items-start justify-start p-4 md:p-12 lg:p-16">
+      <div className="snap-slide snap-slide--text flex flex-col items-start justify-start p-4 lg:p-12 xl:p-16">
 
         <h1
           className="mb-8 text-3xl md:text-5xl font-light leading-tight tracking-tight text-white"
           style={{ fontFamily: "var(--font-serif)" }}
         >
-          {projects.headline}
+          {catalog.headline}
         </h1>
 
         {/* Primary tab bar — categories */}
@@ -231,13 +231,13 @@ export default function ProjectsPage() {
         {/* Prev / Next overlay buttons */}
         <button
           onClick={handlePrev}
-          className="absolute left-4 top-1/2 -translate-y-1/2 z-10 border border-white/15 bg-black/60 backdrop-blur-sm px-3 py-2 text-[0.6rem] uppercase tracking-[0.2em] text-white/50 transition-all duration-300 hover:bg-white/10 hover:text-white hover:border-white/30"
+          className="absolute left-4 top-6/7 lg:top-2/3 -translate-y-1/2 z-10 border border-white/15 bg-black/60 backdrop-blur-sm px-3 py-2 text-[0.6rem] uppercase tracking-[0.2em] text-white/50 transition-all duration-300 hover:bg-white/10 hover:text-white hover:border-white/30"
         >
           ← Prev
         </button>
         <button
           onClick={handleNext}
-          className="absolute right-4 top-1/2 -translate-y-1/2 z-10 border border-white/15 bg-black/60 backdrop-blur-sm px-3 py-2 text-[0.6rem] uppercase tracking-[0.2em] text-white/50 transition-all duration-300 hover:bg-white/10 hover:text-white hover:border-white/30"
+          className="absolute right-4 top-6/7 lg:top-2/3 -translate-y-1/2 z-10 border border-white/15 bg-black/60 backdrop-blur-sm px-3 py-2 text-[0.6rem] uppercase tracking-[0.2em] text-white/50 transition-all duration-300 hover:bg-white/10 hover:text-white hover:border-white/30"
         >
           Next →
         </button>

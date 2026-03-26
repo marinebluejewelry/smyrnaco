@@ -1,7 +1,12 @@
 // ---------------------------------------------------------------------------
 // Static content store – single source of truth for all page copy & assets.
 // No CMS. Every page references this file.
+//
+// This file is .tsx so headline/body fields can contain JSX (React.ReactNode).
+// Example: body: <>First line.<br/><br/>Second with <em>emphasis</em></>
 // ---------------------------------------------------------------------------
+
+import type { ReactNode } from "react";
 
 // ── Shared media types ──────────────────────────────────────────────────────
 
@@ -12,29 +17,31 @@ export interface MediaImage {
   alt: string;
   /** Optional caption shown on hover */
   caption?: string;
+  /** External product link — opens in new tab */
+  link?: string;
 }
 
 // ── Legacy types (kept for backward compat with unused components) ───────────
 
 export interface HeroContent {
   tagline: string;
-  headline: string[];
-  description: string;
+  headline: ReactNode[];
+  description: ReactNode;
   cta: { label: string; href: string };
 }
 
 export interface ShowcaseSection {
   id: string;
   label: string;
-  headline: string;
-  body: string;
+  headline: ReactNode;
+  body: ReactNode;
 }
 
 export interface FeatureItem {
   id: string;
   index: string;
-  title: string;
-  description: string;
+  title: ReactNode;
+  description: ReactNode;
 }
 
 export interface VideoItem {
@@ -42,16 +49,16 @@ export interface VideoItem {
   src: string;
   srcWebm?: string;
   poster?: string;
-  headline?: string;
-  caption?: string;
+  headline?: ReactNode;
+  caption?: ReactNode;
 }
 
 // ── Page-specific content types ─────────────────────────────────────────────
 
 export interface HomeContent {
   logoSrc: string;
-  headline: string;
-  subtitle: string;
+  headline: ReactNode;
+  subtitle: ReactNode;
   videoIntroSrc: string;
   videoLoopSrc: string;
   videoIntroPoster?: string;
@@ -62,27 +69,27 @@ export interface HomeContent {
   videoLoopPosterMobile?: string;
 }
 
-// ── Projects (replaces Who We Are) ──────────────────────────────────────────
+// ── Catalog (replaces Projects / Who We Are) ────────────────────────────────
 
-export interface ProjectTab {
+export interface CatalogTab {
   id: string;
   tabLabel: string;
-  headline: string;
-  body: string;
+  headline: ReactNode;
+  body: ReactNode;
   /** Filename of .glb model in /public/models/ */
   modelFilename: string;
 }
 
-export interface ProjectCategory {
+export interface CatalogCategory {
   id: string;
   /** Display label for the primary tab ("Bracelets", "Necklaces", etc.) */
   label: string;
-  tabs: ProjectTab[];
+  tabs: CatalogTab[];
 }
 
-export interface ProjectsContent {
-  headline: string;
-  categories: ProjectCategory[];
+export interface CatalogContent {
+  headline: ReactNode;
+  categories: CatalogCategory[];
 }
 
 // ── Partners (new page) ─────────────────────────────────────────────────────
@@ -90,17 +97,17 @@ export interface ProjectsContent {
 export interface PartnerTab {
   id: string;
   tabLabel: string;
-  headline: string;
-  body: string;
+  headline: ReactNode;
+  body: ReactNode;
   images: MediaImage[];
 }
 
 export interface PartnersContent {
-  headline: string;
+  headline: ReactNode;
   tabs: PartnerTab[];
   partnership: {
-    headline: string;
-    body: string;
+    headline: ReactNode;
+    body: ReactNode;
     ctaLabel: string;
     ctaHref: string;
   };
@@ -111,25 +118,26 @@ export interface PartnersContent {
 export interface ProcessStep {
   id: string;
   tabLabel: string;
-  headline: string;
-  body: string;
+  headline: ReactNode;
+  body: ReactNode;
   videoSrc: string;
   posterSrc?: string;
 }
 
 export interface HowWeDoItContent {
-  headline: string;
+  headline: ReactNode;
   steps: ProcessStep[];
 }
 
 // ── About Us (replaces Conceptualizing) ─────────────────────────────────────
 
 export interface AboutUsContent {
-  headline: string;
-  paragraphs: string[];
-  scrollHint: string;
-  completionText: string;
+  headline: ReactNode;
+  paragraphs: ReactNode[];
+  scrollHint: ReactNode;
+  completionText: ReactNode;
   completionHref: string;
+  completionUnderText: ReactNode;
 }
 
 // ── Site-wide ───────────────────────────────────────────────────────────────
@@ -137,7 +145,7 @@ export interface AboutUsContent {
 export interface SiteContent {
   brand: string;
   home: HomeContent;
-  projects: ProjectsContent;
+  catalog: CatalogContent;
   partners: PartnersContent;
   howWeDoIt: HowWeDoItContent;
   aboutUs: AboutUsContent;
@@ -176,9 +184,9 @@ const siteContent: SiteContent = {
     videoLoopPosterMobile: "",
   },
 
-  // ── Projects ──────────────────────────────────────────────────────────
-  projects: {
-    headline: "Projects",
+  // ── Catalog ───────────────────────────────────────────────────────────
+  catalog: {
+    headline: "Catalog",
     categories: [
       {
         id: "cat-bracelets",
@@ -200,15 +208,15 @@ const siteContent: SiteContent = {
           },
           {
             id: "bracelet-hitit-revize",
-            tabLabel: "Hitit Revize",
-            headline: "Hitit Revize Bracelet",
+            tabLabel: "Hittite",
+            headline: "Hittite Bracelet",
             body: "A contemporary reinterpretation of Hittite solar disc motifs. The Revize edition refines the original design language with cleaner geometry and a thinner profile, achieving a balance between archaeological authenticity and modern wearability.",
             modelFilename: "hitit-revize-bracelet_compressed.glb",
           },
           {
             id: "bracelet-kanatli-gunes",
-            tabLabel: "Kanatlı Güneş",
-            headline: "Kanatlı Güneş Bracelet",
+            tabLabel: "Winged Sun",
+            headline: "Winged Sun Bracelet",
             body: "The Winged Sun — a symbol shared by civilisations from Egypt to Mesopotamia — is reimagined here as a statement bracelet. Radiating feather-work surrounds a central cabochon, each plume individually sculpted before assembly.",
             modelFilename: "kanatli-gunes-bracelet_compressed.glb",
           },
@@ -221,8 +229,8 @@ const siteContent: SiteContent = {
           },
           {
             id: "bracelet-tas-yildiz",
-            tabLabel: "Taş Yıldız",
-            headline: "Taş Yıldız Bracelet",
+            tabLabel: "Stone Star",
+            headline: "Stone Star Bracelet",
             body: "Stone Star — where gemstone settings are arranged in celestial patterns across a structured bracelet band. Each stone is bezel-set by hand, creating constellations that map ancient Anatolian star charts onto the wrist.",
             modelFilename: "tas-yildiz-bracelet_compressed.glb",
           },
@@ -241,15 +249,15 @@ const siteContent: SiteContent = {
           },
           {
             id: "necklace-hitit-revize",
-            tabLabel: "Hitit Revize",
-            headline: "Hitit Revize Necklace",
+            tabLabel: "Hittite",
+            headline: "Hittite Necklace",
             body: "Hittite sun imagery is distilled into a refined pendant necklace. The revised proportions sit closer to the collarbone, offering a subtler presence than its bracelet counterpart while maintaining the same archaeological depth.",
             modelFilename: "hitit-revize-necklace_compressed.glb",
           },
           {
             id: "necklace-kanatli-gunes",
-            tabLabel: "Kanatlı Güneş",
-            headline: "Kanatlı Güneş Necklace",
+            tabLabel: "Winged Sun",
+            headline: "Winged Sun Necklace",
             body: "The Winged Sun descends from a delicate chain as a statement pendant. Layered metalwork creates dimensional depth — the wings appear to lift away from the body, casting micro-shadows that shift throughout the day.",
             modelFilename: "kanatli-gunes-necklace_compressed.glb",
           },
@@ -262,9 +270,9 @@ const siteContent: SiteContent = {
           },
           {
             id: "necklace-tas-yildiz",
-            tabLabel: "Taş Yıldız",
-            headline: "Taş Yıldız Necklace",
-            body: "Celestial geometry meets pendant design. The Taş Yıldız necklace arranges gemstones in star formations around a central motif, each stone selected for colour consistency and set in precision-machined bezels.",
+            tabLabel: "Stone Star",
+            headline: "Stone Star Necklace",
+            body: "Celestial geometry meets pendant design. The Stone Star necklace arranges gemstones in star formations around a central motif, each stone selected for colour consistency and set in precision-machined bezels.",
             modelFilename: "tas-yildiz-necklace_compressed.glb",
           },
         ],
@@ -289,22 +297,22 @@ const siteContent: SiteContent = {
           },
           {
             id: "earring-hitit-revize",
-            tabLabel: "Hitit Revize",
-            headline: "Hitit Revize Earrings",
+            tabLabel: "Hittite",
+            headline: "Hittite Earrings",
             body: "Miniature solar discs rendered with the same precision as their larger bracelet and necklace counterparts. The revised Hittite motif is scaled to earring proportions without losing any of its symbolic detail.",
             modelFilename: "hitit-revize-earrings_compressed.glb",
           },
           {
             id: "earring-hitit-sembol",
-            tabLabel: "Hitit Sembol",
-            headline: "Hitit Sembol Earrings",
+            tabLabel: "Sunmazed",
+            headline: "Sunmazed Earrings",
             body: "A deeper exploration of Hittite iconography. The Sembol earrings feature sacred symbols drawn from archaeological reliefs, each glyph hand-engraved into the metal surface before final polishing.",
             modelFilename: "hitit-sembol-earrings_compressed.glb",
           },
           {
             id: "earring-hitit-spiral",
-            tabLabel: "Hitit Spiral",
-            headline: "Hitit Spiral Earrings",
+            tabLabel: "Cunei",
+            headline: "Cunei Earrings",
             body: "The eternal spiral — one of humanity's oldest decorative motifs — is reinterpreted through Hittite design sensibility. These earrings coil from a central post, creating a hypnotic visual rhythm that draws the eye inward.",
             modelFilename: "hitit-spiral-earrings_compressed.glb",
           },
@@ -326,38 +334,34 @@ const siteContent: SiteContent = {
     tabs: [
       {
         id: "partner-1",
-        tabLabel: "Partner 1",
-        headline: "Partner 1 — Collaboration",
-        body: "A brief description of this partnership and the products we create together. Replace with actual partner details.",
+        tabLabel: "Marine Blue Jewelry",
+        headline: "A longlasting partnership: Marine Blue.",
+        body: <>For nearly 10 years, Smyrna & Co has worked closely with Marine Blue Jewelry, supporting design and production while contributing to the growth of its wholesale presence in Bali. This partnership is built on trust, craftsmanship, and shared creative vision.<br/><br/><strong> &bull; Private Label Production</strong><br/><br/>We manufacture collections under your brand, ensuring consistency, quality, and scalability. <br/><br/><strong> &bull; Design & Development</strong><br/><br/>From concept sketches to final prototypes, we support the full creative process.</>,
         images: [
-          { id: "p1-img-1", src: "/images/who-we-are-img1.webp", alt: "Partner 1 product 1", caption: "Product detail" },
-          { id: "p1-img-2", src: "/images/who-we-are-img2.webp", alt: "Partner 1 product 2", caption: "Product silhouette" },
-          { id: "p1-img-3", src: "/images/who-we-are-img3.webp", alt: "Partner 1 product 3", caption: "Full collection" },
-          { id: "p1-img-4", src: "/images/who-we-are-img4.webp", alt: "Partner 1 product 4", caption: "Edge detail" },
+          { id: "p2-img-1", src: "/images/web_cowrie_3_nocturnal_black-1-scaled.webp", alt: "Cowrie 3 product picture", caption: "Cowrie 3", link: "https://wholesalejewelry.store/product/cowrie-3-handmade-charm-bracelet/" },
+          { id: "p2-img-2", src: "/images/web_dreamers_nocturnal_black-1-scaled.webp", alt: "Dreamers product picture", caption: "Dreamers", link: "https://wholesalejewelry.store/product/dreamers-handmade-beaded-bracelet/" },
+          { id: "p2-img-3", src: "/images/web_edge_nabi_nocturnal_black-1-scaled.webp", alt: "Edge Nabi product picture", caption: "Edge Nabi", link: "https://wholesalejewelry.store/product/edge-nabi-handmade-butterfly-charm-bracelet/" },
+          { id: "p2-img-4", src: "/images/web_jardin_flower_circle_nocturnal_black-1-scaled.webp", alt: "Jardin Flower product picture", caption: "Jardin Flower", link: "https://wholesalejewelry.store/product/jardin-flower-circle-handmade-beaded-bracelet/" },
+          { id: "p2-img-5", src: "/images/web_solo_daffodils_nocturnal_black-1-scaled.webp", alt: "Solo Daffodils product picture", caption: "Solo Daffodils", link: "https://wholesalejewelry.store/product/solo-daffodils-handmade-beaded-bracelet/" },
+          { id: "p2-img-6", src: "/images/web_solo_flex_3_nocturnal_black-1-scaled.webp", alt: "Solo Flex 3 product picture", caption: "Solo Flex 3", link: "https://wholesalejewelry.store/product/solo-flex-3-handmade-beaded-bracelet/" },
+          { id: "p2-img-7", src: "/images/web_solo_waterfall_nocturnal_black-1-scaled.webp", alt: "Solo Waterfall product picture", caption: "Solo Waterfall", link: "https://wholesalejewelry.store/product/solo-waterfall-handmade-beaded-bracelet/" },
+          { id: "p2-img-8", src: "/images/web_timeless_nocturnal_black-1-scaled.webp", alt: "Timeless product picture", caption: "Timeless", link: "https://wholesalejewelry.store/product/timeless-handmade-charm-bracelet/" },
         ],
       },
       {
         id: "partner-2",
-        tabLabel: "Partner 2",
-        headline: "Partner 2 — Collaboration",
-        body: "A brief description of this partnership and the products we create together. Replace with actual partner details.",
+        tabLabel: "Segara Agung Perthiwi",
+        headline: "Built on trust: Segara Agung Perthiwi.",
+        body: <>Based in Bali, Segara Agung Perthiwi is our retail expression, where design meets customer experience. It allows us to stay closely connected to market trends while refining our collections through direct interaction with customers.<br/><br/><strong> &bull; Custom Collections</strong><br/><br/>We develop exclusive collections tailored to your market, identity, and audience.</>,
         images: [
-          { id: "p2-img-1", src: "/images/web_cowrie_pointed_arctic_rust.webp", alt: "Partner 2 product 1", caption: "Cowrie pointed" },
-          { id: "p2-img-2", src: "/images/web_runes_cowrie_arctic_rust.webp", alt: "Partner 2 product 2", caption: "Runes cowrie" },
-          { id: "p2-img-3", src: "/images/web_solo_1_duablas_arctic_rust.webp", alt: "Partner 2 product 3", caption: "Solo duablas" },
-          { id: "p2-img-4", src: "/images/web_solo_horizon_3_arctic_rust.webp", alt: "Partner 2 product 4", caption: "Solo horizon" },
-        ],
-      },
-      {
-        id: "partner-3",
-        tabLabel: "Partner 3",
-        headline: "Partner 3 — Collaboration",
-        body: "A brief description of this partnership and the products we create together. Replace with actual partner details.",
-        images: [
-          { id: "p3-img-1", src: "/images/who-we-are-img1.webp", alt: "Partner 3 product 1", caption: "Product detail" },
-          { id: "p3-img-2", src: "/images/web_cowrie_pointed_arctic_rust.webp", alt: "Partner 3 product 2", caption: "Cowrie" },
-          { id: "p3-img-3", src: "/images/who-we-are-img3.webp", alt: "Partner 3 product 3", caption: "Collection" },
-          { id: "p3-img-4", src: "/images/web_solo_horizon_3_arctic_rust.webp", alt: "Partner 3 product 4", caption: "Horizon" },
+          { id: "p2-img-1", src: "/images/solo-8-snake.jpg", alt: "Solo 8 Snake product picture", caption: "Solo 8 Snake", link: "https://marinebluejewelry.com/products/solo-8-snake-beaded-bracelet" },
+          { id: "p2-img-2", src: "/images/novir.jpg", alt: "Novir product picture", caption: "Novir", link: "https://marinebluejewelry.com/products/novir-charm-bracelet" },
+          { id: "p2-img-3", src: "/images/fuji.jpg", alt: "Fuji product picture", caption: "Fuji", link: "https://marinebluejewelry.com/products/fuji-charm-bracelet" },
+          { id: "p2-img-4", src: "/images/laden.jpg", alt: "Laden product picture", caption: "Laden", link: "https://marinebluejewelry.com/products/laden-beaded-bracelet" },
+          { id: "p2-img-5", src: "/images/edge-sacred.webp", alt: "Edge Sacred product picture", caption: "Edge Sacred", link: "https://marinebluejewelry.com/products/edge-sacred-charm-bracelet" },
+          { id: "p2-img-6", src: "/images/mojo-pulls.jpg", alt: "Mojo Pulls product picture", caption: "Mojo Pulls", link: "https://marinebluejewelry.com/products/mojo-pulls" },
+          { id: "p2-img-7", src: "/images/pont-tu-gard.jpg", alt: "Pont du Gard product picture", caption: "Pont du Gard", link: "https://marinebluejewelry.com/products/pont-du-gard" },
+          { id: "p2-img-8", src: "/images/odontia.jpg", alt: "Odontia product picture", caption: "Odontia", link: "https://marinebluejewelry.com/products/odontia" },
         ],
       },
     ],
@@ -420,8 +424,9 @@ const siteContent: SiteContent = {
       "Each collection tells a story drawn from the natural world, from architecture, from mathematics. The braided patterns you see in our work are not arbitrary — they follow precise helical curves inspired by the way vines climb, the way rivers braid across a delta, the way DNA coils upon itself. These are patterns that nature has optimized over billions of years. We simply translate them into gold, silver, and stone.",
       "We invite you to explore our work not as consumers, but as participants in a tradition that stretches back to the earliest human impulse to create beauty from raw materials. Every piece of SMYRNA jewelry is a conversation between maker and wearer — a shared belief that the objects we carry with us should be worthy of the stories they will witness.",
     ],
-    scrollHint: "Scroll the text to complete animation",
-    completionText: "Inspired by our Marine Blue Jewelry product, Solo Waterfall",
+    scrollHint: "Scroll the text",
+    completionText: "Solo Waterfall,",
+    completionUnderText: " -Marine Blue",
     completionHref: "https://wholesalejewelry.store/product/solo-waterfall-handmade-beaded-bracelet/",
   },
 
@@ -465,18 +470,18 @@ const siteContent: SiteContent = {
 
 export default siteContent;
 
-// ── Flat project tab helpers (used by per-model subpages) ──────────────────
+// ── Flat catalog tab helpers (used by per-model subpages) ──────────────────
 
-export interface FlatProjectTab extends ProjectTab {
+export interface FlatCatalogTab extends CatalogTab {
   categoryLabel: string;
   categoryId: string;
   globalIndex: number;
 }
 
-export function getFlatProjectTabs(): FlatProjectTab[] {
-  const flat: FlatProjectTab[] = [];
+export function getFlatCatalogTabs(): FlatCatalogTab[] {
+  const flat: FlatCatalogTab[] = [];
   let idx = 0;
-  for (const cat of siteContent.projects.categories) {
+  for (const cat of siteContent.catalog.categories) {
     for (const tab of cat.tabs) {
       flat.push({
         ...tab,
@@ -489,6 +494,6 @@ export function getFlatProjectTabs(): FlatProjectTab[] {
   return flat;
 }
 
-export function getProjectTabById(id: string): FlatProjectTab | undefined {
-  return getFlatProjectTabs().find((t) => t.id === id);
+export function getCatalogTabById(id: string): FlatCatalogTab | undefined {
+  return getFlatCatalogTabs().find((t) => t.id === id);
 }

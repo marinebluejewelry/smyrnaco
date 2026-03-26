@@ -17,9 +17,13 @@ gsap.registerPlugin(Draggable, InertiaPlugin);
 // No infinite loop. Draggable with hard bounds: first slide locks at the left
 // edge, last slide locks at the right edge. Rubber-band edge resistance gives
 // a tactile feel when hitting the ends.
+//
+// Each slide can optionally display a "Visit Product" link (target=_blank)
+// via the MediaImage.link field.
 // ---------------------------------------------------------------------------
 
 const GAP = 16;
+const PADDING = 24;
 
 interface CarouselProps {
   images: MediaImage[];
@@ -37,11 +41,13 @@ export function Carousel({ images }: CarouselProps) {
     if (slideEls.length === 0) return;
 
     const slideWidth = slideEls[0].offsetWidth + GAP;
-    const trackWidth = slideWidth * images.length - GAP; // total track (no trailing gap)
+    // Use the browser's actual measured scrollWidth — accounts for padding,
+    // gaps, and slide widths at every breakpoint without manual math.
+    const trackWidth = trackRef.current.scrollWidth;
     const containerWidth = containerRef.current.offsetWidth;
 
-    // Max drag: 0 (first slide flush left)
-    // Min drag: negative overflow (last slide flush right), or 0 if content fits
+    // Max drag: 0 (first slide at left edge)
+    // Min drag: negative overflow (last slide fully visible), or 0 if content fits
     const minX = Math.min(0, -(trackWidth - containerWidth));
     const maxX = 0;
 
@@ -67,13 +73,13 @@ export function Carousel({ images }: CarouselProps) {
       <div
         ref={trackRef}
         className="carousel-track flex"
-        style={{ gap: `${GAP}px`, paddingLeft: "24px", paddingRight: "24px" }}
+        style={{ gap: `${GAP}px`, paddingLeft: `${PADDING}px`, paddingRight: `${PADDING}px` }}
       >
         {images.map((img, i) => (
           <div
             key={`${img.id}-${i}`}
             data-slide
-            className="carousel-slide group relative flex-shrink-0 w-[200px] md:w-[280px] lg:w-[320px]"
+            className="carousel-slide group relative flex-shrink-0 w-[200px] lg:w-[280px] xl:w-[320px]"
             style={{ aspectRatio: "3 / 4" }}
           >
             <div className="relative h-full w-full overflow-hidden">
@@ -81,21 +87,34 @@ export function Carousel({ images }: CarouselProps) {
                 src={img.src}
                 alt={img.alt}
                 fill
-                sizes="(max-width: 768px) 200px, (max-width: 1024px) 280px, 320px"
+                sizes="(max-width: 1024px) 200px, (max-width: 1280px) 280px, 320px"
                 className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
                 quality={75}
                 draggable={false}
               />
 
+              {/* Caption — slides down from top on hover */}
               {img.caption && (
                 <>
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
-                  <div className="absolute bottom-0 left-0 right-0 translate-y-4 p-5 opacity-0 transition-all duration-500 group-hover:translate-y-0 group-hover:opacity-100">
-                    <p className="text-xs leading-relaxed text-white/80">
+                  <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+                  <div className="absolute top-0 left-0 right-0 -translate-y-4 p-4 opacity-0 transition-all duration-500 group-hover:translate-y-0 group-hover:opacity-100">
+                    <p className="text-center text-[0.75rem] leading-relaxed text-white/80">
                       {img.caption}
                     </p>
                   </div>
                 </>
+              )}
+
+              {/* Visit Product link — always visible at bottom center */}
+              {img.link && (
+                <a
+                  href={img.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="absolute bottom-3 left-1/2 -translate-x-1/2 z-10 border border-white/15 bg-black/10 backdrop-blur-sm px-3 py-1.5 text-[0.45rem] uppercase tracking-[0.2em] text-black/90 transition-all duration-300 hover:bg-black/30 hover:text-white hover:border-white/30 whitespace-nowrap"
+                >
+                  Visit Product
+                </a>
               )}
             </div>
           </div>

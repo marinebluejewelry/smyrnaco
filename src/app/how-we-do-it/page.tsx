@@ -65,7 +65,7 @@ export default function HowWeDoItPage() {
     <div className="snap-container">
 
       {/* ── Left / Top panel — tabs + text ─────────────────────────── */}
-      <div className="snap-slide snap-slide--text flex flex-col items-start justify-start p-4 md:p-12 lg:p-16">
+      <div className="snap-slide snap-slide--text flex flex-col items-start justify-start p-4 lg:p-12 xl:p-16">
         {/* Eyebrow */}
 
         {/* Section headline */}

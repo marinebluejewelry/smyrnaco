@@ -20,7 +20,7 @@ interface NavItem {
 
 const NAV_ITEMS: NavItem[] = [
   { label: "Home", href: "/" },
-  { label: "Projects", href: "/projects" },
+  { label: "Catalog", href: "/catalog" },
   { label: "Partners", href: "/partners" },
   { label: "How We Do It", href: "/how-we-do-it" },
   { label: "About Us", href: "/about-us" },
@@ -32,11 +32,11 @@ export function BottomMenu() {
 
   return (
     <nav
-      className="flex items-center justify-center border-t border-white/5 bg-black/80 backdrop-blur-md flex-shrink-0 pb-3 md:pb-0 z-50"
+      className="flex items-center justify-center border-t border-white/5 bg-black/80 backdrop-blur-md flex-shrink-0 pb-3 lg:pb-0 z-50"
       style={{ minHeight: "60px" }}
     >
       <ul
-        className="steps-scrollbar flex items-center gap-4 px-4 md:gap-8 lg:gap-12 overflow-x-auto whitespace-nowrap md:overflow-x-visible md:justify-center"
+        className="steps-scrollbar flex items-center gap-4 px-4 lg:gap-8 xl:gap-12 overflow-x-auto whitespace-nowrap lg:overflow-x-visible lg:justify-center"
       >
         {NAV_ITEMS.map((item) => {
           const isActive = pathname === item.href;

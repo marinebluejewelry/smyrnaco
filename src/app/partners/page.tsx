@@ -55,7 +55,7 @@ export default function PartnersPage() {
   return (
     <div className="snap-container">
       {/* ── Left / Top panel — tabs + text + partnership ──────────── */}
-      <div className="snap-slide snap-slide--text flex flex-col items-start justify-start p-4 md:p-12 lg:p-16">
+      <div className="snap-slide snap-slide--text flex flex-col items-start justify-start p-4 lg:p-12 xl:p-16">
         {/* Top section — tabs + dynamic content */}
         <div className="flex-1 w-full">
 
