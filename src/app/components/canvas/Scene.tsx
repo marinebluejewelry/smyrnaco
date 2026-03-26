@@ -135,11 +135,11 @@ export function Scene({
 
         {/* ── Lighting rig ─────────────────────────────────────── */}
         {/* DOWNGRADED (uncomment if mobile OOM returns): <ambientLight intensity={isMobile ? 0.4 : 0.15} /> */}
-        <ambientLight intensity={0.15} />
+        <ambientLight intensity={1} />
 
         <directionalLight
-          position={[5, 8, 5]}
-          intensity={2}
+          position={[5, 2, 5]}
+          intensity={3}
           color="#fff5e6"
           castShadow
           /* DOWNGRADED (uncomment if mobile OOM returns): castShadow={!isMobile} */
@@ -165,9 +165,9 @@ export function Scene({
         {/* DOWNGRADED (uncomment if mobile OOM returns): {!isMobile && ( ... )} */}
         <ContactShadows
           position={[0, -2.5, 0]}
-          opacity={0.4}
+          opacity={0.2}
           scale={14}
-          blur={2.5}
+          blur={8.5}
           far={4}
           resolution={256}
         />
@@ -184,7 +184,7 @@ export function Scene({
           />
           <Lightformer
             form="ring"
-            intensity={0.8}
+            intensity={2.8}
             position={[-5, 2, 1]}
             scale={3}
             color="#c0c8ff"
@@ -202,7 +202,7 @@ export function Scene({
         {/* DOWNGRADED (uncomment if mobile OOM returns): {!isMobile && ( ... )} */}
         <EffectComposer multisampling={4}>
           <Bloom
-            intensity={0.35}
+            intensity={0.15}
             luminanceThreshold={0.6}
             luminanceSmoothing={0.9}
             mipmapBlur

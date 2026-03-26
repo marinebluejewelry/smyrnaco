@@ -146,9 +146,6 @@ export default function ProjectsPage() {
     <div className="snap-container">
       {/* ── Left / Top panel — tabs + text ─────────────────────────── */}
       <div className="snap-slide snap-slide--text flex flex-col items-start justify-start p-4 md:p-12 lg:p-16">
-        <p className="mb-6 text-[0.6rem] uppercase tracking-[0.4em] text-white/30">
-          Collection
-        </p>
 
         <h1
           className="mb-8 text-3xl md:text-5xl font-light leading-tight tracking-tight text-white"

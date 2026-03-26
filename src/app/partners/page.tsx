@@ -58,9 +58,6 @@ export default function PartnersPage() {
       <div className="snap-slide snap-slide--text flex flex-col items-start justify-start p-4 md:p-12 lg:p-16">
         {/* Top section — tabs + dynamic content */}
         <div className="flex-1 w-full">
-          <p className="mb-6 text-[0.6rem] uppercase tracking-[0.4em] text-white/30">
-            Collaborations
-          </p>
 
           <h1
             className="mb-10 text-3xl md:text-5xl font-light leading-tight tracking-tight text-white"

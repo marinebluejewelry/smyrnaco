@@ -131,9 +131,6 @@ export default function AboutUsPage() {
             scrollbarColor: "rgba(255,255,255,0.15) transparent",
           }}
         >
-          <p className="mb-4 text-[0.6rem] uppercase tracking-[0.4em] text-white/30">
-            Our Story
-          </p>
           <h1
             className="mb-8 text-3xl md:text-5xl font-light leading-tight tracking-tight text-white"
             style={{ fontFamily: "var(--font-serif)" }}
