@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Inter, Playfair_Display } from "next/font/google";
 import { BottomMenu } from "@/app/components/dom/BottomMenu";
 import { ShopNowCTA } from "@/app/components/dom/ShopNowCTA";
-import { MobileDebugConsole } from "@/app/components/dom/MobileDebugConsole";
+
 import "./globals.css";
 
 // ---------------------------------------------------------------------------
@@ -23,9 +23,42 @@ const playfair = Playfair_Display({
 });
 
 export const metadata: Metadata = {
-  title: "SMYRNA — Brand Showcase",
+  title: {
+    default: "SMYRNA | Handcrafted Concept Jewelry Design & Production",
+    template: "%s | SMYRNA",
+  },
   description:
-    "A high-end immersive brand showcase featuring 3D visuals and scroll-driven storytelling.",
+    "SMYRNA crafts artisan jewelry inspired by ancient Anatolian heritage. Handmade bracelets, necklaces and earrings in electroplated brass and glass beads.",
+  keywords: [
+    "SMYRNA", "handcrafted jewelry", "artisan bracelets", "handmade necklaces",
+    "earrings", "Anatolian jewelry", "Hittite inspired", "ancient motifs",
+    "Farahavar", "Simurg", "beaded bracelets", "electroplated brass jewelry",
+    "Japanese glass beads", "luxury handmade jewelry", "wholesale jewelry",
+    "jewelry manufacturer", "Izmir jewelry",
+  ],
+  openGraph: {
+    type: "website",
+    siteName: "SMYRNA",
+    title: "SMYRNA | Handcrafted Concept Jewelry Design & Production",
+    description:
+      "SMYRNA crafts artisan jewelry inspired by ancient Anatolian heritage. Handmade bracelets, necklaces and earrings in electroplated brass and glass beads.",
+    locale: "en_US",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "SMYRNA | Handcrafted Concept Jewelry Design & Production",
+    description:
+      "SMYRNA crafts artisan jewelry inspired by ancient Anatolian heritage. Handmade bracelets, necklaces and earrings in electroplated brass and glass beads.",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    "max-image-preview": "large",
+    "max-snippet": -1,
+  },
+  alternates: {
+    canonical: "https://smyrnajewelry.com",
+  },
 };
 
 export default function RootLayout({
@@ -41,7 +74,6 @@ export default function RootLayout({
         </main>
         <ShopNowCTA />
         <BottomMenu />
-        <MobileDebugConsole />
       </body>
     </html>
   );
