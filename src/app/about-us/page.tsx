@@ -90,7 +90,7 @@ export default function AboutUsPage() {
     // Smooth interpolation — avoids jerky mouse-wheel snapping
     gsap.to(progressRef, {
       current: targetProgress,
-      duration: 2.6,
+      duration: 1.3,
       ease: "power2.out",
       overwrite: true,
     });

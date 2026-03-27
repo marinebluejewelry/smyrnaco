@@ -242,3 +242,33 @@ canvas:active {
     order: 0;
   }
 }
+
+/* ------------------------------------------------------------------ */
+/* Contact — scrollable text+form panel on both mobile and desktop.     */
+/* Mobile: maps 30%, text+form 70%.                                     */
+/* Desktop: 50/50, left panel scrolls to reveal form.                   */
+/* ------------------------------------------------------------------ */
+
+.contact-map-panel.snap-slide--media {
+  flex: 0 0 30%;
+  height: 30%;
+}
+
+.contact-text-panel.snap-slide--text {
+  flex: 0 0 70%;
+  height: 70%;
+}
+
+@media (min-width: 1025px) {
+  .contact-map-panel.snap-slide--media {
+    flex: 1 1 0%;
+    width: 50%;
+    height: 100%;
+  }
+  .contact-text-panel.snap-slide--text {
+    flex: 1 1 0%;
+    width: 50%;
+    height: 100%;
+    overflow-y: auto;
+  }
+}

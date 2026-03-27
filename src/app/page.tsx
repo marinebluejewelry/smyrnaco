@@ -145,12 +145,12 @@ export default function Home() {
         {/* Headline + subtitle */}
         <div ref={textRef} className="max-w-lg opacity-0">
           <h1
-            className="text-[34px] md:text-[62px] font-light leading-tight tracking-tight text-white"
+            className="text-[26px] md:text-[36px] font-light leading-tight tracking-tight text-white md:text-nowrap"
             style={{ fontFamily: "var(--font-serif)" }}
           >
             {home.headline}
           </h1>
-          <span className="mt-3 block text-[17px] md:text-[19px] uppercase tracking-[0.4em] text-white/50">
+          <span className="mt-3 block text-[11px] md:text-[14px] uppercase tracking-[0.4em] text-white/40 md:text-nowrap">
             {home.subtitle}
           </span>
         </div>
