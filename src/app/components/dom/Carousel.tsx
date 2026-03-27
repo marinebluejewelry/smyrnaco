@@ -93,11 +93,11 @@ export function Carousel({ images }: CarouselProps) {
                 draggable={false}
               />
 
-              {/* Caption — slides down from top on hover */}
+              {/* Caption — always visible on mobile, hover-reveal on desktop */}
               {img.caption && (
                 <>
-                  <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
-                  <div className="absolute top-0 left-0 right-0 -translate-y-4 p-4 opacity-0 transition-all duration-500 group-hover:translate-y-0 group-hover:opacity-100">
+                  <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-transparent lg:opacity-0 transition-opacity duration-500 lg:group-hover:opacity-100" />
+                  <div className="absolute top-0 left-0 right-0 p-4 lg:-translate-y-4 lg:opacity-0 transition-all duration-500 lg:group-hover:translate-y-0 lg:group-hover:opacity-100">
                     <p className="text-center text-[0.75rem] leading-relaxed text-white/80">
                       {img.caption}
                     </p>

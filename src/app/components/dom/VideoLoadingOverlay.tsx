@@ -76,10 +76,11 @@ export function VideoLoadingOverlay({ videoRef }: VideoLoadingOverlayProps) {
 
   return (
     <div
-      className="absolute inset-0 z-10 flex items-center justify-center bg-black/80 backdrop-blur-sm transition-opacity duration-500 pointer-events-none"
+      className="absolute inset-0 z-10 flex items-center justify-center transition-opacity duration-500 pointer-events-none"
       style={{ opacity: active ? 1 : 0 }}
     >
-      <div className="text-center">
+      {/* Transparent overlay — poster image shows through behind this */}
+      <div className="text-center bg-black/50 backdrop-blur-sm rounded-lg px-6 py-4">
         <p className="text-[0.6rem] uppercase tracking-[0.3em] text-white/40 mb-3">
           Loading
         </p>
