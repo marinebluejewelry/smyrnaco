@@ -336,7 +336,7 @@ const siteContent: SiteContent = {
         id: "partner-1",
         tabLabel: "Marine Blue Jewelry",
         headline: "A longlasting partnership: Marine Blue.",
-        body: <>For nearly 10 years, Smyrna & Co has worked closely with Marine Blue Jewelry, supporting design and production while contributing to the growth of its wholesale presence in Bali. This partnership is built on trust, craftsmanship, and shared creative vision.<br/><br/><strong>&bull; Private Label Production</strong><br/><br/>We manufacture collections under your brand, ensuring consistency, quality, and scalability. <br/><br/><strong> &bull; Design & Development</strong><br/><br/>From concept sketches to final prototypes, we support the full creative process.</>,
+        body: <>For nearly 10 years, Smyrna & Co has worked closely with Marine Blue Jewelry, supporting design and production while contributing to the growth of its wholesale presence in Bali. This partnership is built on trust, craftsmanship, and shared creative vision.<br/><br/><strong>&bull; Private Label Production</strong>: We manufacture collections under your brand, ensuring consistency, quality, and scalability. <br/><br/><strong> &bull; Design & Development</strong>: From concept sketches to final prototypes, we support the full creative process.</>,
         images: [
           { id: "p2-img-1", src: "/images/web_cowrie_3_nocturnal_black-1-scaled.webp", alt: "Cowrie 3 product picture", caption: "Cowrie 3", link: "https://wholesalejewelry.store/product/cowrie-3-handmade-charm-bracelet/" },
           { id: "p2-img-2", src: "/images/web_dreamers_nocturnal_black-1-scaled.webp", alt: "Dreamers product picture", caption: "Dreamers", link: "https://wholesalejewelry.store/product/dreamers-handmade-beaded-bracelet/" },
@@ -352,7 +352,7 @@ const siteContent: SiteContent = {
         id: "partner-2",
         tabLabel: "Segara Agung Perthiwi",
         headline: "Built on trust: Segara Agung Perthiwi.",
-        body: <>Based in Bali, Segara Agung Perthiwi is our retail expression, where design meets customer experience. It allows us to stay closely connected to market trends while refining our collections through direct interaction with customers.<br/><br/><strong> &bull; Custom Collections</strong><br/><br/>We develop exclusive collections tailored to your market, identity, and audience.</>,
+        body: <>Based in Bali, Segara Agung Perthiwi is our retail expression, where design meets customer experience. It allows us to stay closely connected to market trends while refining our collections through direct interaction with customers.<br/><br/><strong> &bull; Custom Collections</strong>: We develop exclusive collections tailored to your market, identity, and audience.</>,
         images: [
           { id: "p2-img-1", src: "/images/solo-8-snake.jpg", alt: "Solo 8 Snake product picture", caption: "Solo 8 Snake", link: "https://marinebluejewelry.com/products/solo-8-snake-beaded-bracelet" },
           { id: "p2-img-2", src: "/images/novir.jpg", alt: "Novir product picture", caption: "Novir", link: "https://marinebluejewelry.com/products/novir-charm-bracelet" },

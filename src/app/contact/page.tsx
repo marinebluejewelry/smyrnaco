@@ -55,10 +55,24 @@ export default function ContactPage() {
                   Address
                 </p>
                 <p>
-                  441. Street<br />
+                  YILDIZ Mah. 441 Sk. - #10<br />
                   Konak, Izmir 35360<br />
                   Turkey
                 </p>
+              </div>
+
+              {/* Email */}
+              <div>
+                <p className="mb-2 text-[0.6rem] uppercase tracking-[0.3em] text-white/30">
+                  Phone / Whatsapp
+                </p>
+                <a
+                  href="https://api.whatsapp.com/send/?phone=905537955754&text&type=phone_number&app_absent=0"
+                  className="text-white/50 transition-colors duration-300 hover:text-white"
+                  target="_blank"
+                >
+                  +90 (553) 7955754
+                </a>
               </div>
 
               {/* Email */}
@@ -77,7 +91,7 @@ export default function ContactPage() {
               {/* Website */}
               <div>
                 <p className="mb-2 text-[0.6rem] uppercase tracking-[0.3em] text-white/30">
-                  Store
+                 Partnered Store
                 </p>
                 <a
                   href="https://wholesalejewelry.store/"
