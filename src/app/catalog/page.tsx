@@ -149,7 +149,7 @@ export default function CatalogPage() {
 
         <h1
           className="mb-8 text-3xl md:text-5xl font-light leading-tight tracking-tight text-white"
-          style={{ fontFamily: "var(--font-serif)" }}
+         
         >
           {catalog.headline}
         </h1>
@@ -203,7 +203,7 @@ export default function CatalogPage() {
         <div ref={contentRef}>
           <h2
             className="mb-4 text-xl md:text-2xl font-light tracking-tight text-white"
-            style={{ fontFamily: "var(--font-serif)" }}
+           
           >
             {current.headline}
           </h2>
@@ -245,7 +245,7 @@ export default function CatalogPage() {
         {/* SUBPAGE FLOW (uncomment if mobile OOM returns, and comment out above):
         {isMobile ? (
           <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 px-8">
-            <p className="text-lg font-light text-white/60 text-center" style={{ fontFamily: "var(--font-serif)" }}>
+            <p className="text-lg font-light text-white/60 text-center">
               Select a piece to explore in 3D
             </p>
             <p className="text-[0.6rem] uppercase tracking-[0.3em] text-white/20 text-center">

@@ -146,7 +146,7 @@ export default function Home() {
         <div ref={textRef} className="max-w-lg opacity-0">
           <h1
             className="text-[26px] md:text-[36px] font-light leading-tight tracking-tight text-white md:text-nowrap"
-            style={{ fontFamily: "var(--font-serif)" }}
+           
           >
             {home.headline}
           </h1>

@@ -71,7 +71,7 @@ export default function HowWeDoItPage() {
         {/* Section headline */}
         <h1
           className="mb-10 text-3xl md:text-5xl font-light leading-tight tracking-tight text-white"
-          style={{ fontFamily: "var(--font-serif)" }}
+         
         >
           {howWeDoIt.headline}
         </h1>
@@ -99,7 +99,7 @@ export default function HowWeDoItPage() {
         <div ref={contentRef}>
           <h2
             className="mb-4 text-xl md:text-2xl font-light tracking-tight text-white"
-            style={{ fontFamily: "var(--font-serif)" }}
+           
           >
             {current.headline}
           </h2>

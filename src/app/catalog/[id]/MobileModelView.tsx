@@ -79,7 +79,7 @@ export function MobileModelView({ tab, prevId, nextId }: MobileModelViewProps) {
 
         <h1
           className="mb-4 text-2xl font-light leading-tight tracking-tight text-white"
-          style={{ fontFamily: "var(--font-serif)" }}
+         
         >
           {tab.headline}
         </h1>

@@ -1,23 +1,18 @@
 import type { Metadata } from "next";
-import { Inter, Playfair_Display } from "next/font/google";
+import { Questrial } from "next/font/google";
 import { BottomMenu } from "@/app/components/dom/BottomMenu";
 import { ShopNowCTA } from "@/app/components/dom/ShopNowCTA";
 
 import "./globals.css";
 
 // ---------------------------------------------------------------------------
-// Fonts — Inter (body sans) + Playfair Display (headline serif).
-// Both exposed as CSS custom properties for use across all components.
+// Font — Questrial (single font sitewide).
+// Exposed as CSS custom property for use across all components.
 // ---------------------------------------------------------------------------
 
-const inter = Inter({
+const questrial = Questrial({
   variable: "--font-sans",
-  subsets: ["latin"],
-  display: "swap",
-});
-
-const playfair = Playfair_Display({
-  variable: "--font-serif",
+  weight: "400",
   subsets: ["latin"],
   display: "swap",
 });
@@ -68,7 +63,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${inter.variable} ${playfair.variable} antialiased flex flex-col overflow-hidden`}>
+      <body className={`${questrial.variable} antialiased flex flex-col overflow-hidden`}>
         <main className="flex-1 flex flex-col min-h-0">
           {children}
         </main>

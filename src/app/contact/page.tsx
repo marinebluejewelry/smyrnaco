@@ -43,7 +43,7 @@ export default function ContactPage() {
             </p>
             <h1
               className="mb-8 text-3xl md:text-5xl font-light leading-tight tracking-tight text-white"
-              style={{ fontFamily: "var(--font-serif)" }}
+             
             >
               Contact
             </h1>

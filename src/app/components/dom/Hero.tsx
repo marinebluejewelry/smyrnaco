@@ -109,7 +109,7 @@ export function Hero({ isReady }: HeroProps) {
               key={i}
               ref={(el) => { linesRef.current[i] = el; }}
               className="block font-serif text-5xl font-light italic opacity-0 sm:text-6xl md:text-7xl lg:text-[5.5rem] xl:text-[7rem]"
-              style={{ fontFamily: "var(--font-serif)" }}
+             
             >
               {line}
             </span>

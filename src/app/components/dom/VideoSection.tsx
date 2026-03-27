@@ -127,7 +127,7 @@ export function VideoSection({ data }: VideoSectionProps) {
             {data.headline && (
               <h3
                 className="mb-2 text-2xl font-light italic leading-tight text-white sm:text-3xl md:text-4xl lg:text-5xl"
-                style={{ fontFamily: "var(--font-serif)" }}
+               
               >
                 {data.headline}
               </h3>

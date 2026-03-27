@@ -11,7 +11,7 @@ html {
 body {
   margin: 0;
   padding: 0;
-  background-color: #29100a;
+  background-color: #2e1f12;
   color: #ffffff;
   font-family: var(--font-sans), "Inter", system-ui, -apple-system, sans-serif;
   overflow-x: hidden;
@@ -19,14 +19,6 @@ body {
   -moz-osx-font-smoothing: grayscale;
   height: 100vh;        /* fallback for older browsers */
   height: 100dvh;       /* dynamic viewport height — excludes browser chrome */
-}
-
-/* ------------------------------------------------------------------ */
-/* Serif utility — Playfair Display for headlines                      */
-/* ------------------------------------------------------------------ */
-
-.font-serif {
-  font-family: var(--font-serif), "Playfair Display", Georgia, serif;
 }
 
 /* ------------------------------------------------------------------ */

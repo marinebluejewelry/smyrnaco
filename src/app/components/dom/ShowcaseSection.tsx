@@ -92,7 +92,7 @@ export function ShowcaseSection({ data, index }: ShowcaseSectionProps) {
         <h2
           data-animate
           className="font-light italic leading-tight tracking-tight text-white text-4xl sm:text-5xl md:text-6xl lg:text-7xl"
-          style={{ fontFamily: "var(--font-serif)" }}
+         
         >
           {data.headline}
         </h2>

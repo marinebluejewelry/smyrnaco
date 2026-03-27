@@ -61,7 +61,7 @@ export default function PartnersPage() {
 
           <h1
             className="mb-10 text-3xl md:text-5xl font-light leading-tight tracking-tight text-white"
-            style={{ fontFamily: "var(--font-serif)" }}
+           
           >
             {partners.headline}
           </h1>
@@ -89,11 +89,11 @@ export default function PartnersPage() {
           <div ref={contentRef}>
             <h2
               className="mb-4 text-xl md:text-2xl font-light tracking-tight text-white"
-              style={{ fontFamily: "var(--font-serif)" }}
+             
             >
               {current.headline}
             </h2>
-            <p className="max-w-md text-sm leading-relaxed text-white/50">
+            <p className="mb-5 max-w-md text-sm leading-relaxed text-white/40">
               {current.body}
             </p>
           </div>
@@ -103,11 +103,11 @@ export default function PartnersPage() {
         <div className="w-full flex-shrink-0 mt-auto border-t border-white/10 pt-6 md:pt-8">
           <h3
             className="mb-3 text-lg md:text-xl font-light tracking-tight text-white"
-            style={{ fontFamily: "var(--font-serif)" }}
+           
           >
             {partners.partnership.headline}
           </h3>
-          <p className="mb-5 max-w-md text-xs leading-relaxed text-white/40">
+          <p className="mb-5 max-w-md text-sm leading-relaxed text-white/40">
             {partners.partnership.body}
           </p>
           <Link

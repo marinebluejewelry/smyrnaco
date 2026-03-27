@@ -74,7 +74,7 @@ export function Features() {
         </p>
         <h2
           className="max-w-2xl text-3xl font-light italic leading-tight tracking-tight text-white sm:text-4xl md:text-5xl"
-          style={{ fontFamily: "var(--font-serif)" }}
+         
         >
           Built on three
           <br />
