@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
-import { mobileModelPath } from "@/app/lib/models";
+import { mobileModelPath } from "@/app/lib/cdn";
 import { LoadingOverlay } from "@/app/components/dom/LoadingOverlay";
 import { WebGLErrorBoundary } from "@/app/components/dom/WebGLErrorBoundary";
 import type { FlatCatalogTab } from "@/app/lib/data";

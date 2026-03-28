@@ -4,7 +4,7 @@ import { useRef, useState, useCallback, useEffect } from "react";
 import dynamic from "next/dynamic";
 import gsap from "gsap";
 import siteContent from "@/app/lib/data";
-import { modelPath, mobileModelPath } from "@/app/lib/models";
+import { modelPath, mobileModelPath } from "@/app/lib/cdn";
 import { LoadingOverlay } from "@/app/components/dom/LoadingOverlay";
 import { WebGLErrorBoundary } from "@/app/components/dom/WebGLErrorBoundary";
 

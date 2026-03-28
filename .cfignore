@@ -1,0 +1,7 @@
+# Exclude large assets from Cloudflare Pages build.
+# These are served from Cloudflare R2 via cdn.smyrnajewelry.com.
+# Files remain in the GitHub repo for local development.
+
+public/videos/
+public/models/
+public/models-mobile/

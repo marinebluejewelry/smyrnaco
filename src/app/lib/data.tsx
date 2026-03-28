@@ -7,6 +7,7 @@
 // ---------------------------------------------------------------------------
 
 import type { ReactNode } from "react";
+import { videoPath } from "@/app/lib/cdn";
 
 // ── Shared media types ──────────────────────────────────────────────────────
 
@@ -174,12 +175,12 @@ const siteContent: SiteContent = {
     logoSrc: "/images/smyrna-logo-white.png",
     headline: "Designed in Detail. Delivered in Full.",
     subtitle: "SMYRNA: Concept Jewelry Design & Production",
-    videoIntroSrc: "/videos/herointro.mp4",
-    videoLoopSrc: "/videos/heroloop.mp4",
+    videoIntroSrc: videoPath("herointro.mp4"),
+    videoLoopSrc: videoPath("heroloop.mp4"),
     videoIntroPoster: "/images/desktop-hero-poster.webp",
     videoLoopPoster: "",
-    videoIntroSrcMobile: "/videos/mobileintro.mp4",
-    videoLoopSrcMobile: "/videos/mobileloop.mp4",
+    videoIntroSrcMobile: videoPath("mobileintro.mp4"),
+    videoLoopSrcMobile: videoPath("mobileloop.mp4"),
     videoIntroPosterMobile: "/images/mobile-hero-poster.webp",
     videoLoopPosterMobile: "",
   },
@@ -382,7 +383,7 @@ const siteContent: SiteContent = {
         tabLabel: "Design",
         headline: "Concept to Blueprint",
         body: <>Every piece begins long before any material is touched — it starts as an idea, a reference, a feeling that needs to find its shape. Our design process moves through distinct phases: initial concept sketching, where intuition leads and the hand moves freely; proportional studies, where each element is measured against the human body it will eventually occupy; and technical drafting, where organic forms are translated into precise specifications that production can follow faithfully.<br/><br/>We work iteratively, cycling between hand drawing and digital modelling until the design resolves into something that feels both inevitable and surprising. A successful design should look as though it could not have been made any other way — every curve, every junction, every transition between surfaces serving a purpose that is structural, aesthetic, or both. Dozens of variations are explored and discarded before a single form earns its place in the collection.</>,
-        videoSrc: "/videos/how-we-do-design.mp4",
+        videoSrc: videoPath("how-we-do-design.mp4"),
         posterSrc: "/images/how-we-do-design.webp",
       },
       {
@@ -390,7 +391,7 @@ const siteContent: SiteContent = {
         tabLabel: "Plating",
         headline: "Surface & Finish",
         body: <>Plating is the process that defines a piece's final character — its colour, its lustre, and the way it interacts with light throughout the day. We apply metal coatings through electroplating, a controlled electrochemical process where the base component is submerged in a solution containing dissolved metal ions. Electrical current drives these ions onto the surface, building up an even, bonded layer atom by atom.<br/><br/>The thickness, composition, and sequence of plating layers all affect the final result. Some pieces receive a single coating; others require multiple layers applied in precise order to achieve the desired warmth, depth, or reflectivity. Temperature, current density, and immersion time are monitored throughout — small deviations produce visible differences in the finished surface. The goal is consistency across every unit in a production run, so that a piece made on a Monday is indistinguishable from one made on a Friday.</>,
-        videoSrc: "/videos/how-we-do-plating.mp4",
+        videoSrc: videoPath("how-we-do-plating.mp4"),
         posterSrc: "/images/how-we-do-plating.webp",
       },
       {
@@ -398,7 +399,7 @@ const siteContent: SiteContent = {
         tabLabel: "Printing",
         headline: "Colour & Detail",
         body: <>Once a component has been plated and its metallic surface is complete, it moves to printing — the stage where colour, pattern, and visual identity are applied. The process works much like a conventional printer applying ink to a blank page, except the surface is a small, three-dimensional metal charm rather than paper. The freshly plated piece is loaded into a precision printing machine that deposits pigments, motifs, and detailed graphics directly onto the metal surface with pinpoint accuracy.<br/><br/>This is where a plain plated component transforms into a recognisable design element — the specific colours, the fine lines of a motif, the gradients and details that give each charm its character. Registration must be exact; even a fraction of a millimetre of misalignment is visible on a piece this small. Colour consistency across a production batch is equally critical, since multiple printed charms will sit side by side on the finished jewelry. The result is a library of detailed, vibrant components ready to be incorporated into the final assembly.</>,
-        videoSrc: "/videos/how-we-do-printing.mp4",
+        videoSrc: videoPath("how-we-do-printing.mp4"),
         posterSrc: "/images/how-we-do-printing.webp",
       },
       {
@@ -406,7 +407,7 @@ const siteContent: SiteContent = {
         tabLabel: "Handiwork",
         headline: "Assembly by Hand",
         body: <>Handiwork is where a collection of individual components becomes a finished piece of jewelry. This is the most labour-intensive phase of production — and the one most resistant to automation. Beads are threaded in precise sequences, findings are attached, clasps are connected, and every element is checked for alignment, tension, and security. The hands that perform this work carry years of accumulated knowledge: how tightly to pull a cord, how much pressure a connection can bear, when a bead sits flush and when it needs repositioning.<br/><br/>Each piece passes through multiple stages of hand assembly, with quality checks between each one. The final inspection is tactile as much as visual — the piece is handled, flexed, worn, and evaluated for how it feels in motion. A bracelet that looks perfect on a workbench but catches on skin or hangs unevenly on a wrist is sent back for adjustment. The standard is not technical perfection in isolation, but a seamless experience for the person who will eventually wear it every day.</>,
-        videoSrc: "/videos/how-we-do-handiwork.mp4",
+        videoSrc: videoPath("how-we-do-handiwork.mp4"),
         posterSrc: "/images/how-we-do-handiwork.webp",
       },
     ],

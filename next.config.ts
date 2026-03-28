@@ -21,24 +21,13 @@ const nextConfig: NextConfig = {
   // output: "export",
 
   // ---------------------------------------------------------------------------
-  // Headers — cache control for static media assets
+  // Headers — cache control for static assets still served by Pages.
+  // Videos and models are served from R2 CDN (cache headers set there).
   // ---------------------------------------------------------------------------
   async headers() {
     return [
       {
-        source: "/videos/:path*",
-        headers: [
-          { key: "Cache-Control", value: "public, max-age=31536000, immutable" },
-        ],
-      },
-      {
         source: "/images/:path*",
-        headers: [
-          { key: "Cache-Control", value: "public, max-age=31536000, immutable" },
-        ],
-      },
-      {
-        source: "/models/:path*",
         headers: [
           { key: "Cache-Control", value: "public, max-age=31536000, immutable" },
         ],
