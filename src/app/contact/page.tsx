@@ -81,10 +81,10 @@ export default function ContactPage() {
                   Email
                 </p>
                 <a
-                  href="mailto:web@marinebluejewelry.com"
+                  href="mailto:info@smyrnajewelry.com"
                   className="text-white/50 transition-colors duration-300 hover:text-white"
                 >
-                  web@marinebluejewelry.com
+                  info@smyrnajewelry.com
                 </a>
               </div>
 
