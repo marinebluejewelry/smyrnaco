@@ -61,6 +61,14 @@ export default function HowWeDoItPage() {
     [activeTab, steps],
   );
 
+  const handlePrev = useCallback(() => {
+    handleTabChange((activeTab - 1 + steps.length) % steps.length);
+  }, [activeTab, steps.length, handleTabChange]);
+
+  const handleNext = useCallback(() => {
+    handleTabChange((activeTab + 1) % steps.length);
+  }, [activeTab, steps.length, handleTabChange]);
+
   return (
     <div className="snap-container">
 
@@ -77,7 +85,7 @@ export default function HowWeDoItPage() {
         </h1>
 
         {/* Tab bar */}
-        <div className="steps-scrollbar mb-10 flex w-full overflow-x-auto gap-2 border-b border-white/10 pb-3 whitespace-nowrap">
+        <div className="steps-scrollbar mb-10 flex w-full overflow-x-auto gap-2 border-b border-white/10 pb-6 whitespace-nowrap">
           {steps.map((step, i) => (
             <button
               key={step.id}
@@ -123,6 +131,20 @@ export default function HowWeDoItPage() {
         >
           <source src={current.videoSrc} type="video/mp4" />
         </video>
+
+        {/* Prev / Next overlay buttons */}
+        <button
+          onClick={handlePrev}
+          className="absolute left-4 top-6/7 lg:top-2/3 -translate-y-1/2 z-10 border border-white/15 bg-black/60 backdrop-blur-sm px-3 py-2 text-[0.6rem] uppercase tracking-[0.2em] text-white/50 transition-all duration-300 hover:bg-white/10 hover:text-white hover:border-white/30"
+        >
+          ← Prev
+        </button>
+        <button
+          onClick={handleNext}
+          className="absolute right-4 top-6/7 lg:top-2/3 -translate-y-1/2 z-10 border border-white/15 bg-black/60 backdrop-blur-sm px-3 py-2 text-[0.6rem] uppercase tracking-[0.2em] text-white/50 transition-all duration-300 hover:bg-white/10 hover:text-white hover:border-white/30"
+        >
+          Next →
+        </button>
       </div>
     </div>
   );

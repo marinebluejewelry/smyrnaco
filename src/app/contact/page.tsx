@@ -107,7 +107,7 @@ export default function ContactPage() {
         </div>
 
         {/* Monday.com form — tall so user can scroll into it on both mobile and desktop */}
-        <div className="flex-shrink-0 border-t border-white/10 h-[80dvh]">
+        <div className="flex-shrink-0 border-t border-white/10 h-[60dvh] lg:h-[80dvh]">
           <iframe
             src="https://forms.monday.com/forms/embed/106febb69aefb1e61ea3c361bbb784e4?r=use1"
             className="w-full h-full border-0"
@@ -116,6 +116,17 @@ export default function ContactPage() {
             allowFullScreen
           />
         </div>
+
+        {/* Back to Top — escape hatch when iframe captures touch */}
+        <button
+          onClick={() => {
+            const panel = document.querySelector('.contact-text-panel');
+            panel?.scrollTo({ top: 0, behavior: 'smooth' });
+          }}
+          className="flex-shrink-0 w-full border-t border-white/10 py-4 text-center text-[0.6rem] uppercase tracking-[0.3em] text-white/30 transition-colors duration-300 hover:text-white/60"
+        >
+          ↑ Back to Top
+        </button>
       </div>
 
       {/* ── Media panel — Google Maps ─────────────────────────────── */}

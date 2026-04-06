@@ -69,7 +69,7 @@ export function Carousel({ images }: CarouselProps) {
   }, [images.length]);
 
   return (
-    <div ref={containerRef} className="absolute inset-0 flex items-center overflow-hidden">
+    <div ref={containerRef} className="absolute inset-0 z-0 flex items-center overflow-hidden">
       <div
         ref={trackRef}
         className="carousel-track flex"
