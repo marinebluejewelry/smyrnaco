@@ -26,10 +26,12 @@ export function LoadingOverlay() {
   // `active` is false and `progress` is 0 — we still want to show the
   // overlay during this pre-init phase.
   const hasStarted = useRef(false);
-  if (active) hasStarted.current = true;
+  if (active || progress > 0) hasStarted.current = true;
 
   // True once loading has genuinely finished (not the initial idle state).
-  const done = hasStarted.current && !active && progress === 100;
+  // Also treat progress === 100 as done even if `active` was never true
+  // (can happen when models load from cache before the next React render).
+  const done = hasStarted.current && !active;
 
   useEffect(() => {
     if (done) {
