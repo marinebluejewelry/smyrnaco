@@ -176,7 +176,7 @@ export default function CatalogPage() {
         {/* Secondary tab bar — projects within category */}
         <div
           ref={secondaryBarRef}
-          className="steps-scrollbar mb-10 flex w-full overflow-x-auto gap-2 border-b border-white/5 pb-3 whitespace-nowrap"
+          className="steps-scrollbar mb-10 flex w-full overflow-x-auto gap-2 border-b border-white/5 pb-6 whitespace-nowrap"
         >
           {tabs.map((tab, i) => (
             <button

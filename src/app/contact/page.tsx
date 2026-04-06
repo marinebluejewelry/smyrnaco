@@ -67,11 +67,11 @@ export default function ContactPage() {
                   Phone / Whatsapp
                 </p>
                 <a
-                  href="https://api.whatsapp.com/send/?phone=905537955754&text&type=phone_number&app_absent=0"
+                  href="https://api.whatsapp.com/send/?phone=905343829399&text&type=phone_number&app_absent=0"
                   className="text-white/50 transition-colors duration-300 hover:text-white"
                   target="_blank"
                 >
-                  +90 (553) 7955754
+                  +90 (534) 3829399
                 </a>
               </div>
 
