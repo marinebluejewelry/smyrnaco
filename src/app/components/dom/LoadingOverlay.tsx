@@ -22,16 +22,16 @@ export function LoadingOverlay() {
   const { progress, active } = useProgress();
   const [visible, setVisible] = useState(true);
 
-  // Track whether Three.js has ever started loading. Before it does,
-  // `active` is false and `progress` is 0 — we still want to show the
-  // overlay during this pre-init phase.
+  // Track whether Three.js has ever reported loading activity.
+  // Before it does, active is false and progress is 0 — we keep the
+  // overlay visible during this pre-init phase so there's no blank frame.
   const hasStarted = useRef(false);
-  if (active || progress > 0) hasStarted.current = true;
+  if (active) hasStarted.current = true;
 
-  // True once loading has genuinely finished (not the initial idle state).
-  // Also treat progress === 100 as done even if `active` was never true
-  // (can happen when models load from cache before the next React render).
-  const done = hasStarted.current && !active;
+  // Done = loading started via DefaultLoadingManager and finished,
+  // OR a safety timeout fired (covers pages where useProgress never
+  // reports active because the model bypasses drei's loading manager).
+  const done = hasStarted.current && !active && progress === 100;
 
   useEffect(() => {
     if (done) {
